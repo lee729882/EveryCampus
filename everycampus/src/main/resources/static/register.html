@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>회원가입</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f9f9f9;
+    }
+    form {
+      background-color: white;
+      padding: 24px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      width: 300px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    input, select, button {
+      padding: 10px;
+      font-size: 14px;
+    }
+    button {
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <form id="registerForm">
+    <h2>회원가입</h2>
+    <select name="school" required>
+      <option value="">학교 선택</option>
+      <option value="목포대학교">목포대학교</option>
+      <option value="전남대학교">전남대학교</option>
+      <option value="순천대학교">순천대학교</option>
+    </select>
+    <input type="text" name="username" placeholder="아이디" required />
+    <input type="password" name="password" placeholder="비밀번호" required />
+    <button type="submit">회원가입</button>
+  </form>
+
+  <script>
+    document.getElementById("registerForm").onsubmit = async function(e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      const data = Object.fromEntries(formData);
+      const response = await fetch("/api/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+
+      const result = await response.text();
+      alert(result);
+      if (response.ok) {
+        location.href = "/login.html"; // 추후 로그인 페이지로 이동
+      }
+    };
+  </script>
+</body>
+</html>
