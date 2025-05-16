@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>회원가입</title>
+  <title>로그인</title>
   <style>
     body {
       font-family: sans-serif;
@@ -22,7 +22,7 @@
       flex-direction: column;
       gap: 10px;
     }
-    input, select, button {
+    input, button {
       padding: 10px;
       font-size: 14px;
     }
@@ -35,29 +35,37 @@
     button:hover {
       background-color: #45a049;
     }
+    .link-buttons {
+      display: flex;
+      justify-content: space-between;
+    }
+    .link-buttons button {
+      background-color: #2196f3;
+    }
+    .link-buttons button:hover {
+      background-color: #1976d2;
+    }
   </style>
 </head>
 <body>
-  <form id="registerForm">
-    <h2>회원가입</h2>
-    <select name="school" required>
-      <option value="">학교 선택</option>
-      <option value="목포대학교">목포대학교</option>
-      <option value="전남대학교">전남대학교</option>
-      <option value="순천대학교">순천대학교</option>
-    </select>
+  <form id="loginForm">
+    <h2>로그인</h2>
     <input type="text" name="username" placeholder="아이디" required />
     <input type="password" name="password" placeholder="비밀번호" required />
-    <input type="email" name="email" placeholder="이메일" required /> <!-- 추가 -->
-    <button type="submit">회원가입</button>
+    <button type="submit">로그인</button>
+    <div class="link-buttons">
+      <button type="button" onclick="location.href='register.html'">회원가입</button>
+      <button type="button" onclick="location.href='find-id.html'">아이디 찾기</button>
+      <button type="button" onclick="location.href='find-password.html'">비밀번호 찾기</button>
+    </div>
   </form>
 
   <script>
-    document.getElementById("registerForm").onsubmit = async function(e) {
+    document.getElementById("loginForm").onsubmit = async function(e) {
       e.preventDefault();
       const formData = new FormData(this);
       const data = Object.fromEntries(formData);
-      const response = await fetch("/api/register", {
+      const response = await fetch("/api/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data)
@@ -66,9 +74,10 @@
       const result = await response.text();
       alert(result);
       if (response.ok) {
-        location.href = "/login.html"; // 추후 로그인 페이지로 이동
+        location.href = "/main.html"; // 로그인 성공 후 메인 페이지로 이동
       }
     };
   </script>
+  
 </body>
 </html>

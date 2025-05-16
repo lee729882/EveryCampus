@@ -25,4 +25,7 @@ public class User {
 
     @Column(nullable = false)
     private String school;
+    
+    @Column(nullable = false, unique = true)
+    private String email;
 }
