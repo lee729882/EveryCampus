@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>로그인</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f9f9f9;
+    }
+    form {
+      background-color: white;
+      padding: 24px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      width: 300px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    input, button {
+      padding: 10px;
+      font-size: 14px;
+    }
+    button {
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    .link-buttons {
+      display: flex;
+      justify-content: space-between;
+    }
+    .link-buttons button {
+      background-color: #2196f3;
+    }
+    .link-buttons button:hover {
+      background-color: #1976d2;
+    }
+  </style>
+</head>
+<body>
+  <form id="loginForm">
+    <h2>로그인</h2>
+    <input type="text" name="username" placeholder="아이디" required />
+    <input type="password" name="password" placeholder="비밀번호" required />
+    <button type="submit">로그인</button>
+    <div class="link-buttons">
+      <button type="button" onclick="location.href='register.html'">회원가입</button>
+      <button type="button" onclick="location.href='find-id.html'">아이디 찾기</button>
+      <button type="button" onclick="location.href='find-password.html'">비밀번호 찾기</button>
+    </div>
+  </form>
+
+  <script>
+    document.getElementById("loginForm").onsubmit = async function(e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      const data = Object.fromEntries(formData);
+      const response = await fetch("/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+
+      const result = await response.text();
+      alert(result);
+      if (response.ok) {
+        location.href = "/main.html"; // 로그인 성공 후 메인 페이지로 이동
+      }
+    };
+  </script>
+  
+</body>
+</html>

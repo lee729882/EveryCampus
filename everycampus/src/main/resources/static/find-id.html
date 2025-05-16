@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>아이디 찾기</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f9f9f9;
+    }
+    form {
+      background-color: white;
+      padding: 24px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      width: 300px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    input, button {
+      padding: 10px;
+      font-size: 14px;
+    }
+    button {
+      background-color: #2196f3;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #1976d2;
+    }
+  </style>
+</head>
+<body>
+  <form id="findIdForm">
+    <h2>아이디 찾기</h2>
+    <input type="email" name="email" placeholder="이메일" required />
+    <button type="submit">아이디 전송</button>
+    <button type="button" onclick="location.href='login.html'">로그인 화면으로 돌아가기</button>
+    
+  </form>
+
+  <script>
+    document.getElementById("findIdForm").onsubmit = async function(e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      const data = Object.fromEntries(formData);
+      const response = await fetch("/api/find-id", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+
+      const result = await response.text();
+      alert(result);
+    };
+  </script>
+</body>
+</html>
