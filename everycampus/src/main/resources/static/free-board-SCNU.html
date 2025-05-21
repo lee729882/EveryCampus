@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>순천대학교 자유게시판</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap">
+  <style>
+    :root {
+      --primary: #4263eb;
+      --primary-hover: #3b5bdb;
+      --danger: #e03131;
+      --danger-hover: #c92a2a;
+      --background: #f5f5f7;
+      --card: #ffffff;
+      --text: #333333;
+      --text-light: #666666;
+      --border: #e0e0e0;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body { 
+      font-family: 'Noto Sans KR', sans-serif; 
+      background-color: var(--background);
+      color: var(--text);
+      line-height: 1.6;
+      padding-bottom: 80px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .board-title {
+      color: var(--primary);
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 15px;
+    }
+
+    .divider {
+      height: 2px;
+      background-color: var(--primary);
+      margin-bottom: 20px;
+    }
+
+    .greeting-card {
+      background-color: var(--card);
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .post { 
+      background-color: var(--card);
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .post-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 10px;
+    }
+
+    .post-content {
+      font-size: 1rem;
+      color: var(--text);
+      margin-bottom: 15px;
+    }
+
+    .post-meta {
+      font-size: 0.9rem;
+      color: var(--text-light);
+      margin-bottom: 10px;
+    }
+
+    .delete-btn {
+      background-color: var(--danger);
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 8px 15px;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    .delete-btn:hover {
+      background-color: var(--danger-hover);
+    }
+
+    .write-btn-fixed {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      width: 120px;
+      height: 50px;
+      border-radius: 25px;
+      background-color: var(--primary);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+      border: none;
+      font-size: 1rem;
+      font-weight: 500;
+    }
+
+    .write-btn-fixed i {
+      margin-right: 8px;
+    }
+
+    .write-btn-fixed:hover {
+      background-color: var(--primary-hover);
+    }
+
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 200;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal {
+      background-color: var(--card);
+      border-radius: 8px;
+      padding: 25px;
+      width: 90%;
+      max-width: 600px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+      position: relative;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--text-light);
+      margin: 0;
+      padding: 0;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal h3 {
+      margin-top: 0;
+      color: var(--text);
+      margin-bottom: 20px;
+      font-size: 1.5rem;
+    }
+
+    textarea, input { 
+      width: 100%; 
+      margin-bottom: 15px; 
+      padding: 12px 15px;
+      font-size: 1rem;
+      background-color: #fff;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--text);
+      font-family: 'Noto Sans KR', sans-serif;
+    }
+
+    textarea:focus, input:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    button {
+      padding: 12px 20px;
+      font-size: 1rem;
+      cursor: pointer;
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-weight: 500;
+    }
+
+    button:hover {
+      background-color: var(--primary-hover);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 50px 20px;
+      background-color: var(--card);
+      border-radius: 8px;
+      margin-top: 20px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .empty-state h3 {
+      font-size: 1.3rem;
+      margin-bottom: 10px;
+      color: var(--text);
+    }
+
+    .empty-state p {
+      color: var(--text-light);
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 15px;
+      }
+      
+      .post {
+        padding: 15px;
+      }
+      
+      .modal {
+        width: 95%;
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="board-title">순천대학교 자유게시판</h1>
+    <div class="divider"></div>
+    
+    <div class="greeting-card">
+      <span id="greeting"></span>
+    </div>
+
+    <div id="posts"></div>
+  </div>
+
+  <!-- 고정된 글쓰기 버튼 -->
+  <button class="write-btn-fixed" onclick="toggleWriteForm()">
+    <i class="fa fa-pen"></i> 글쓰기
+  </button>
+
+  <!-- 모달 배경과 컨테이너 -->
+  <div id="writeFormModal" class="modal-backdrop">
+    <div class="modal">
+      <button class="modal-close" onclick="toggleWriteForm()">×</button>
+      <h3>새 글 작성</h3>
+      <input type="text" id="title" placeholder="제목" />
+      <textarea id="content" rows="5" placeholder="내용"></textarea>
+      <button onclick="submitPost()">작성</button>
+    </div>
+  </div>
+
+  <script>
+    // 사용자 이름 가져오거나 요청
+    let username = localStorage.getItem("username");
+    if (!username) {
+      username = prompt("닉네임을 입력해주세요:");
+      if (username) {
+        localStorage.setItem("username", username);
+      } else {
+        username = "익명";
+      }
+    }
+
+    // 인사말 표시
+    document.getElementById('greeting').textContent = `${username}님 안녕하세요!`;
+
+    function toggleWriteForm() {
+      const modal = document.getElementById('writeFormModal');
+      if (modal.style.display === 'flex') {
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto'; // 스크롤 다시 활성화
+      } else {
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden'; // 스크롤 방지
+      }
+    }
+
+    async function loadPosts() {
+      const res = await fetch('/api/board/free-s');
+      const posts = (await res.json()).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+      const container = document.getElementById('posts');
+
+      if (posts.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <h3>아직 게시글이 없습니다</h3>
+            <p>첫 번째 게시글을 작성해보세요!</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = posts.map(p => {
+        const isMine = p.writer === username;
+        return `
+          <div class="post">
+            <h3>${p.title}</h3>
+            <p>${p.content}</p>
+            <small>by ${p.writer} (${p.school}) / ${new Date(p.createdAt).toLocaleString('ko-KR')}</small> 
+            ${isMine ? `<button class="delete-btn" onclick="deletePost(${p.id})">삭제</button>` : ""}
+          </div>
+        `;
+      }).join('');
+    }
+
+    async function submitPost() {
+      const post = {
+        title: document.getElementById('title').value,
+        content: document.getElementById('content').value,
+        writer: username
+      };
+
+      await fetch('/api/board/free-s', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(post)
+      });
+
+      document.getElementById('title').value = '';
+      document.getElementById('content').value = '';
+      toggleWriteForm();
+      loadPosts();
+    }
+
+    async function deletePost(id) {
+      if (!confirm("정말 삭제하시겠습니까?")) return;
+
+      const res = await fetch(`/api/board/free-s/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'username': username
+        }
+      });
+
+      if (res.ok) {
+        alert("삭제되었습니다.");
+        loadPosts();
+      } else {
+        const message = await res.text();
+        alert("삭제 실패: " + message);
+      }
+    }
+
+    loadPosts();
+  </script>
+</body>
+</html>
