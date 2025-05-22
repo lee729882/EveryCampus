@@ -63,5 +63,28 @@ public class FreeBoardController {
         freeBoardRepository.delete(post);
         return ResponseEntity.ok().build();
     }
+    
+    @PutMapping("/{id}")
+    public ResponseEntity<?> update(@PathVariable("id") Long id,
+    			@RequestParam("username") String username,
+    			@RequestBody FreeBoard updatedPost) {
+        Optional<FreeBoard> optional = freeBoardRepository.findById(id);
+        if (optional.isEmpty()) return ResponseEntity.notFound().build();
+
+        FreeBoard post = optional.get();
+
+        // 작성자 검증
+        if (!post.getWriter().equals(username)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("수정 권한이 없습니다.");
+        }
+
+        // 내용 수정
+        post.setTitle(updatedPost.getTitle());
+        post.setContent(updatedPost.getContent());
+
+        freeBoardRepository.save(post);
+        return ResponseEntity.ok(post);
+    }
+
 
 }

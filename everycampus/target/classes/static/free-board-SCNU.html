@@ -12,17 +12,17 @@
       --primary-hover: #3b5bdb;
       --danger: #e03131;
       --danger-hover: #c92a2a;
-      --background: #f5f5f7;
-      --card: #ffffff;
-      --text: #333333;
-      --text-light: #666666;
-      --border: #e0e0e0;
+      --text: #333;
+      --text-light: #666;
+      --text-lighter: #888;
+      --border: #e9ecef;
+      --background: #f8f9fa;
+      --card: #fff;
+      --reaction: #f0f2ff;
     }
 
     * {
       box-sizing: border-box;
-      margin: 0;
-      padding: 0;
     }
 
     body { 
@@ -30,20 +30,21 @@
       background-color: var(--background);
       color: var(--text);
       line-height: 1.6;
-      padding-bottom: 80px;
+      padding-bottom: 80px; /* 고정 버튼을 위한 여백 */
+      margin: 0;
     }
 
     .container {
-      max-width: 800px;
+      max-width: 600px;
       margin: 0 auto;
       padding: 20px;
     }
 
     .board-title {
-      color: var(--primary);
       font-size: 1.8rem;
+      margin-bottom: 1rem;
+      color: var(--primary);
       font-weight: 700;
-      margin-bottom: 15px;
     }
 
     .divider {
@@ -54,82 +55,184 @@
 
     .greeting-card {
       background-color: var(--card);
-      border-radius: 8px;
-      padding: 20px;
-      margin-bottom: 20px;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      border-radius: 12px;
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      font-weight: 500;
+      font-size: 1rem;
     }
 
     .post { 
+      border-radius: 12px;
+      padding: 0;
+      margin-bottom: 1.5rem;
       background-color: var(--card);
-      border-radius: 8px;
-      padding: 20px;
-      margin-bottom: 20px;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      overflow: hidden;
     }
 
-    .post-title {
-      font-size: 1.3rem;
-      font-weight: 700;
-      color: var(--text);
-      margin-bottom: 10px;
+    .post-header {
+      display: flex;
+      align-items: center;
+      padding: 15px;
+      border-bottom: 1px solid var(--border);
     }
 
-    .post-content {
-      font-size: 1rem;
-      color: var(--text);
-      margin-bottom: 15px;
-    }
-
-    .post-meta {
-      font-size: 0.9rem;
-      color: var(--text-light);
-      margin-bottom: 10px;
-    }
-
-    .delete-btn {
-      background-color: var(--danger);
-      color: white;
-      border: none;
-      border-radius: 4px;
-      padding: 8px 15px;
-      font-size: 0.9rem;
-      cursor: pointer;
-    }
-
-    .delete-btn:hover {
-      background-color: var(--danger-hover);
-    }
-
-    .write-btn-fixed {
-      position: fixed;
-      bottom: 30px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 100;
-      width: 120px;
-      height: 50px;
-      border-radius: 25px;
+    .post-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
       background-color: var(--primary);
       color: white;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-      cursor: pointer;
+      font-weight: bold;
+      margin-right: 12px;
+      font-size: 1.2rem;
+    }
+
+    .post-user-info {
+      flex: 1;
+    }
+
+    .post-username {
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-bottom: 2px;
+    }
+
+    .post-meta {
+      font-size: 0.8rem;
+      color: var(--text-lighter);
+    }
+
+    .post-content-container {
+      padding: 15px;
+    }
+
+    .post-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: var(--text);
+    }
+
+    .post-content {
+      font-size: 0.95rem;
+      color: var(--text-light);
+      margin-bottom: 15px;
+      line-height: 1.5;
+    }
+
+    .post-actions {
+      display: flex;
+      padding: 10px 15px;
+      border-top: 1px solid var(--border);
+      background-color: #fafafa;
+    }
+
+    .post-action-btn {
+      display: flex;
+      align-items: center;
+      background: none;
       border: none;
+      color: var(--text-light);
+      font-size: 0.9rem;
+      cursor: pointer;
+      padding: 5px 10px;
+      border-radius: 4px;
+      margin-right: 10px;
+      transition: background-color 0.2s;
+    }
+
+    .post-action-btn:hover {
+      background-color: var(--reaction);
+      color: var(--primary);
+    }
+
+    .post-action-btn i {
+      margin-right: 5px;
+    }
+
+    .delete-btn {
+      margin-left: auto;
+      background-color: transparent;
+      color: var(--text-lighter);
+      border: none;
+      font-size: 0.85rem;
+      cursor: pointer;
+      padding: 5px 10px;
+      border-radius: 4px;
+      transition: all 0.2s;
+    }
+
+    .delete-btn:hover {
+      color: var(--danger);
+      background-color: #fff0f0;
+    }
+
+    textarea, input { 
+      width: 100%; 
+      margin-bottom: 1rem; 
+      padding: 0.75rem 1rem;
       font-size: 1rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-family: 'Noto Sans KR', sans-serif;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    textarea:focus, input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(66, 99, 235, 0.1);
+    }
+
+    button {
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      cursor: pointer;
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      margin-bottom: 1rem;
       font-weight: 500;
+      transition: background-color 0.2s, transform 0.1s;
+    }
+
+    button:hover {
+      background-color: var(--primary-hover);
+    }
+
+    button:active {
+      transform: translateY(1px);
+    }
+
+    /* 고정 글쓰기 버튼 스타일 */
+    .write-btn-fixed {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 100;
+      width: auto;
+      height: 50px;
+      border-radius: 25px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+      margin-bottom: 0;
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .write-btn-fixed i {
       margin-right: 8px;
     }
 
-    .write-btn-fixed:hover {
-      background-color: var(--primary-hover);
-    }
-
+    /* 모달 배경 */
     .modal-backdrop {
       display: none;
       position: fixed;
@@ -143,16 +246,18 @@
       align-items: center;
     }
 
+    /* 모달 컨테이너 */
     .modal {
       background-color: var(--card);
-      border-radius: 8px;
-      padding: 25px;
+      border-radius: 12px;
+      padding: 2rem;
       width: 90%;
-      max-width: 600px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+      max-width: 500px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
       position: relative;
     }
 
+    /* 모달 닫기 버튼 */
     .modal-close {
       position: absolute;
       top: 15px;
@@ -171,76 +276,50 @@
       justify-content: center;
     }
 
+    .modal-close:hover {
+      color: var(--text);
+      background: none;
+    }
+
     .modal h3 {
       margin-top: 0;
       color: var(--text);
-      margin-bottom: 20px;
-      font-size: 1.5rem;
-    }
-
-    textarea, input { 
-      width: 100%; 
-      margin-bottom: 15px; 
-      padding: 12px 15px;
-      font-size: 1rem;
-      background-color: #fff;
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      color: var(--text);
-      font-family: 'Noto Sans KR', sans-serif;
-    }
-
-    textarea:focus, input:focus {
-      outline: none;
-      border-color: var(--primary);
-    }
-
-    button {
-      padding: 12px 20px;
-      font-size: 1rem;
-      cursor: pointer;
-      background-color: var(--primary);
-      color: white;
-      border: none;
-      border-radius: 4px;
-      font-weight: 500;
-    }
-
-    button:hover {
-      background-color: var(--primary-hover);
+      margin-bottom: 1.5rem;
+      font-size: 1.3rem;
     }
 
     .empty-state {
       text-align: center;
-      padding: 50px 20px;
+      padding: 2rem;
+      color: var(--text-light);
       background-color: var(--card);
-      border-radius: 8px;
-      margin-top: 20px;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      border-radius: 12px;
+      margin: 2rem 0;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     }
 
     .empty-state h3 {
-      font-size: 1.3rem;
-      margin-bottom: 10px;
-      color: var(--text);
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
     }
 
     .empty-state p {
-      color: var(--text-light);
+      font-size: 0.9rem;
+      color: var(--text-lighter);
     }
 
-    @media (max-width: 768px) {
+    @media (max-width: 600px) {
       .container {
         padding: 15px;
       }
       
       .post {
-        padding: 15px;
+        border-radius: 8px;
       }
-      
+
       .modal {
         width: 95%;
-        padding: 20px;
+        padding: 1.5rem;
       }
     }
   </style>
@@ -299,70 +378,158 @@
       }
     }
 
-    async function loadPosts() {
-      const res = await fetch('/api/board/free-s');
-      const posts = (await res.json()).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    // 사용자 이니셜 가져오기
+    function getInitials(name) {
+      return name.charAt(0).toUpperCase();
+    }
 
-      const container = document.getElementById('posts');
-
-      if (posts.length === 0) {
-        container.innerHTML = `
-          <div class="empty-state">
-            <h3>아직 게시글이 없습니다</h3>
-            <p>첫 번째 게시글을 작성해보세요!</p>
-          </div>
-        `;
-        return;
+    // 날짜 형식 변환
+    function formatTime(date) {
+      const now = new Date();
+      const diff = now - date;
+      
+      // 1분 미만
+      if (diff < 60 * 1000) {
+        return '방금 전';
       }
+      // 1시간 미만
+      else if (diff < 60 * 60 * 1000) {
+        return `${Math.floor(diff / (60 * 1000))}분 전`;
+      }
+      // 오늘
+      else if (date.getDate() === now.getDate() && 
+               date.getMonth() === now.getMonth() && 
+               date.getFullYear() === now.getFullYear()) {
+        return `오늘 ${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}`;
+      }
+      // 어제
+      else if (date.getDate() === now.getDate() - 1 && 
+               date.getMonth() === now.getMonth() && 
+               date.getFullYear() === now.getFullYear()) {
+        return `어제 ${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}`;
+      }
+      // 그 외
+      else {
+        return `${date.getFullYear()}.${date.getMonth() + 1}.${date.getDate()}`;
+      }
+    }
 
-      container.innerHTML = posts.map(p => {
-        const isMine = p.writer === username;
-        return `
-          <div class="post">
-            <h3>${p.title}</h3>
-            <p>${p.content}</p>
-            <small>by ${p.writer} (${p.school}) / ${new Date(p.createdAt).toLocaleString('ko-KR')}</small> 
-            ${isMine ? `<button class="delete-btn" onclick="deletePost(${p.id})">삭제</button>` : ""}
+    async function loadPosts() {
+      try {
+        const res = await fetch('/api/board/free-s');
+        const posts = (await res.json()).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+        const container = document.getElementById('posts');
+
+        if (posts.length === 0) {
+          container.innerHTML = `
+            <div class="empty-state">
+              <h3>아직 게시글이 없습니다</h3>
+              <p>첫 번째 게시글을 작성해보세요!</p>
+            </div>
+          `;
+          return;
+        }
+
+        container.innerHTML = posts.map(p => {
+          const isMine = p.writer === username;
+          const date = new Date(p.createdAt);
+          const formattedTime = formatTime(date);
+          const school = p.school || '순천대';
+          
+          return `
+            <div class="post">
+              <div class="post-header">
+                <div class="post-avatar">${getInitials(p.writer)}</div>
+                <div class="post-user-info">
+                  <div class="post-username">${p.writer} <span style="font-weight: normal; font-size: 0.85rem;">(${school})</span></div>
+                  <div class="post-meta">${formattedTime}</div>
+                </div>
+              </div>
+              <div class="post-content-container">
+                <div class="post-title">${p.title}</div>
+                <div class="post-content">${p.content}</div>
+              </div>
+              <div class="post-actions">
+                <button class="post-action-btn">
+                  <i class="far fa-heart"></i> 좋아요
+                </button>
+                <button class="post-action-btn">
+                  <i class="far fa-comment"></i> 댓글
+                </button>
+                ${isMine ? `<button class="delete-btn" onclick="deletePost(${p.id})"><i class="far fa-trash-alt"></i> 삭제</button>` : ""}
+              </div>
+            </div>
+          `;
+        }).join('');
+      } catch (error) {
+        console.error("게시글을 불러오는 중 오류가 발생했습니다:", error);
+        document.getElementById('posts').innerHTML = `
+          <div class="empty-state">
+            <h3>게시글을 불러올 수 없습니다</h3>
+            <p>잠시 후 다시 시도해주세요.</p>
           </div>
         `;
-      }).join('');
+      }
     }
 
     async function submitPost() {
+      const title = document.getElementById('title').value;
+      const content = document.getElementById('content').value;
+      
+      if (!title.trim() || !content.trim()) {
+        alert("제목과 내용을 모두 입력해주세요.");
+        return;
+      }
+      
       const post = {
-        title: document.getElementById('title').value,
-        content: document.getElementById('content').value,
+        title: title,
+        content: content,
         writer: username
       };
 
-      await fetch('/api/board/free-s', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(post)
-      });
+      try {
+        const res = await fetch('/api/board/free-s', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(post)
+        });
 
-      document.getElementById('title').value = '';
-      document.getElementById('content').value = '';
-      toggleWriteForm();
-      loadPosts();
+        if (res.ok) {
+          document.getElementById('title').value = '';
+          document.getElementById('content').value = '';
+          toggleWriteForm();
+          loadPosts();
+        } else {
+          alert("게시글 작성에 실패했습니다.");
+        }
+      } catch (error) {
+        console.error("게시글 작성 중 오류가 발생했습니다:", error);
+        alert("게시글 작성에 실패했습니다. 잠시 후 다시 시도해주세요.");
+      }
     }
 
     async function deletePost(id) {
       if (!confirm("정말 삭제하시겠습니까?")) return;
 
-      const res = await fetch(`/api/board/free-s/${id}`, {
-        method: 'DELETE',
-        headers: {
-          'username': username
-        }
-      });
+      try {
+        const res = await fetch(`/api/board/free-s/${id}`, {
+          method: 'DELETE',
+          headers: {
+            'username': username
+          }
+        });
 
-      if (res.ok) {
-        alert("삭제되었습니다.");
-        loadPosts();
-      } else {
-        const message = await res.text();
-        alert("삭제 실패: " + message);
+        if (res.ok) {
+          alert("삭제되었습니다.");
+          loadPosts();
+        } else {
+          const message = await res.text();
+          alert("삭제 실패: " + message);
+        }
+      } catch (error) {
+        console.error("게시글 삭제 중 오류가 발생했습니다:", error);
+        alert("게시글 삭제에 실패했습니다. 잠시 후 다시 시도해주세요.");
       }
     }
 

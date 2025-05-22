@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>자유게시판</title>
+  <title>목포대 자유게시판</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap">
   <style>
     :root {
@@ -13,9 +14,11 @@
       --danger-hover: #c92a2a;
       --text: #333;
       --text-light: #666;
+      --text-lighter: #888;
       --border: #e9ecef;
       --background: #f8f9fa;
       --card: #fff;
+      --reaction: #f0f2ff;
     }
 
     * {
@@ -25,7 +28,7 @@
     body { 
       font-family: 'Noto Sans KR', sans-serif; 
       padding: 20px; 
-      max-width: 800px;
+      max-width: 600px;
       margin: 0 auto;
       background-color: var(--background);
       color: var(--text);
@@ -34,7 +37,7 @@
     }
 
     h2 {
-      font-size: 2rem;
+      font-size: 1.8rem;
       margin-bottom: 1rem;
       color: var(--primary);
       border-bottom: 2px solid var(--primary);
@@ -42,35 +45,113 @@
     }
 
     .post { 
-      border-radius: 8px;
-      padding: 1.5rem;
+      border-radius: 12px;
+      padding: 0;
       margin-bottom: 1.5rem;
       background-color: var(--card);
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      overflow: hidden;
     }
 
-    .post:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    .post-header {
+      display: flex;
+      align-items: center;
+      padding: 15px;
+      border-bottom: 1px solid var(--border);
     }
 
-    .post h3 { 
-      margin: 0 0 0.75rem 0;
+    .post-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: var(--primary);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      margin-right: 12px;
+      font-size: 1.2rem;
+    }
+
+    .post-user-info {
+      flex: 1;
+    }
+
+    .post-username {
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-bottom: 2px;
+    }
+
+    .post-meta {
+      font-size: 0.8rem;
+      color: var(--text-lighter);
+    }
+
+    .post-content-container {
+      padding: 15px;
+    }
+
+    .post-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 10px;
       color: var(--text);
-      font-size: 1.25rem;
     }
 
-    .post p {
-      margin: 0 0 1rem 0;
+    .post-content {
+      font-size: 0.95rem;
       color: var(--text-light);
+      margin-bottom: 15px;
+      line-height: 1.5;
     }
 
-    .post small {
-      display: block;
+    .post-actions {
+      display: flex;
+      padding: 10px 15px;
+      border-top: 1px solid var(--border);
+      background-color: #fafafa;
+    }
+
+    .post-action-btn {
+      display: flex;
+      align-items: center;
+      background: none;
+      border: none;
       color: var(--text-light);
+      font-size: 0.9rem;
+      cursor: pointer;
+      padding: 5px 10px;
+      border-radius: 4px;
+      margin-right: 10px;
+      transition: background-color 0.2s;
+    }
+
+    .post-action-btn:hover {
+      background-color: var(--reaction);
+      color: var(--primary);
+    }
+
+    .post-action-btn i {
+      margin-right: 5px;
+    }
+
+    .delete-btn {
+      margin-left: auto;
+      background-color: transparent;
+      color: var(--text-lighter);
+      border: none;
       font-size: 0.85rem;
-      margin-bottom: 0.5rem;
+      cursor: pointer;
+      padding: 5px 10px;
+      border-radius: 4px;
+      transition: all 0.2s;
+    }
+
+    .delete-btn:hover {
+      color: var(--danger);
+      background-color: #fff0f0;
     }
 
     textarea, input { 
@@ -79,7 +160,7 @@
       padding: 0.75rem 1rem;
       font-size: 1rem;
       border: 1px solid var(--border);
-      border-radius: 4px;
+      border-radius: 8px;
       font-family: 'Noto Sans KR', sans-serif;
       transition: border-color 0.2s, box-shadow 0.2s;
     }
@@ -87,7 +168,7 @@
     textarea:focus, input:focus {
       outline: none;
       border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(66, 99, 235, 0.2);
+      box-shadow: 0 0 0 3px rgba(66, 99, 235, 0.1);
     }
 
     button {
@@ -97,7 +178,7 @@
       background-color: var(--primary);
       color: white;
       border: none;
-      border-radius: 4px;
+      border-radius: 8px;
       margin-bottom: 1rem;
       font-weight: 500;
       transition: background-color 0.2s, transform 0.1s;
@@ -115,13 +196,22 @@
     .write-btn-fixed {
       position: fixed;
       bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
+      right: 20px;
       z-index: 100;
+      width: 60px;
+      height: 60px;
       border-radius: 30px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
       margin-bottom: 0;
-      padding: 0.75rem 2rem;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .write-btn-fixed:before {
+      content: "✏️";
+      font-size: 1.5rem;
     }
 
     /* 모달 배경 */
@@ -141,10 +231,10 @@
     /* 모달 컨테이너 */
     .modal {
       background-color: var(--card);
-      border-radius: 8px;
+      border-radius: 12px;
       padding: 2rem;
       width: 90%;
-      max-width: 600px;
+      max-width: 500px;
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
       position: relative;
     }
@@ -173,35 +263,41 @@
       background: none;
     }
 
+    .modal h3 {
+      margin-top: 0;
+      color: var(--text);
+      margin-bottom: 1.5rem;
+      font-size: 1.3rem;
+    }
+
     #greeting {
       font-weight: 500;
       margin-bottom: 1.5rem;
       background-color: var(--card);
       padding: 1rem;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      font-size: 1rem;
     }
 
-    .delete-btn {
-      background-color: var(--danger);
-      margin-top: 0.5rem;
+    .empty-state {
+      text-align: center;
+      padding: 2rem;
+      color: var(--text-light);
+      background-color: var(--card);
+      border-radius: 12px;
+      margin: 2rem 0;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    .empty-state h3 {
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .empty-state p {
       font-size: 0.9rem;
-      padding: 0.5rem 1rem;
-    }
-
-    .delete-btn:hover {
-      background-color: var(--danger-hover);
-    }
-
-    .write-btn:before {
-      content: "✏️";
-      margin-right: 8px;
-    }
-
-    .modal h3 {
-      margin-top: 0;
-      color: var(--primary);
-      margin-bottom: 1.5rem;
+      color: var(--text-lighter);
     }
 
     @media (max-width: 600px) {
@@ -211,22 +307,13 @@
       }
       
       .post {
-        padding: 1rem;
+        border-radius: 8px;
       }
 
       .modal {
         width: 95%;
         padding: 1.5rem;
       }
-    }
-
-    .empty-state {
-      text-align: center;
-      padding: 2rem;
-      color: var(--text-light);
-      background-color: var(--card);
-      border-radius: 8px;
-      margin: 2rem 0;
     }
   </style>
 </head>
@@ -237,7 +324,7 @@
   <div id="posts"></div>
 
   <!-- 고정된 글쓰기 버튼 -->
-  <button class="write-btn write-btn-fixed" onclick="toggleWriteForm()">글쓰기</button>
+  <button class="write-btn write-btn-fixed" onclick="toggleWriteForm()"></button>
 
   <!-- 모달 배경과 컨테이너 -->
   <div id="writeFormModal" class="modal-backdrop">
@@ -251,97 +338,160 @@
   </div>
 
   <script>
-    // 사용자 이름 가져오거나 요청
-    let username = localStorage.getItem("username");
-    if (!username) {
-      username = prompt("닉네임을 입력해주세요:");
-      if (username) {
-        localStorage.setItem("username", username);
-      } else {
-        username = "익명";
-      }
+  // 사용자 이름 가져오거나 요청
+  let username = localStorage.getItem("username");
+  if (!username) {
+    username = prompt("닉네임을 입력해주세요:");
+    if (username) {
+      localStorage.setItem("username", username);
+    } else {
+      username = "익명";
     }
+  }
 
-    // 인사말 표시
-    document.getElementById('greeting').textContent = `${username}님 안녕하세요!`;
+  // 인사말 표시
+  document.getElementById('greeting').textContent = `${username}님 안녕하세요!`;
 
-    function toggleWriteForm() {
-      const modal = document.getElementById('writeFormModal');
-      if (modal.style.display === 'flex') {
-        modal.style.display = 'none';
-        document.body.style.overflow = 'auto'; // 스크롤 다시 활성화
-      } else {
-        modal.style.display = 'flex';
-        document.body.style.overflow = 'hidden'; // 스크롤 방지
-      }
+  function toggleWriteForm() {
+    const modal = document.getElementById('writeFormModal');
+    if (modal.style.display === 'flex') {
+      modal.style.display = 'none';
+      document.body.style.overflow = 'auto';
+    } else {
+      modal.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
     }
+  }
 
-    async function loadPosts() {
-      const res = await fetch('/api/board/free');
-      const posts = (await res.json()).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  function getInitials(name) {
+    return name.charAt(0).toUpperCase();
+  }
 
-      const container = document.getElementById('posts');
+  function formatTime(date) {
+    const now = new Date();
+    const diff = now - date;
 
-      if (posts.length === 0) {
-        container.innerHTML = `
-          <div class="empty-state">
-            <h3>아직 게시글이 없습니다</h3>
-            <p>첫 번째 게시글을 작성해보세요!</p>
-          </div>
-        `;
-        return;
-      }
+    if (diff < 60 * 1000) return '방금 전';
+    else if (diff < 60 * 60 * 1000) return `${Math.floor(diff / (60 * 1000))}분 전`;
+    else if (date.toDateString() === now.toDateString())
+      return `오늘 ${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}`;
+    else if (date.getDate() === now.getDate() - 1)
+      return `어제 ${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}`;
+    else
+      return `${date.getFullYear()}.${date.getMonth() + 1}.${date.getDate()}`;
+  }
 
-      container.innerHTML = posts.map(p => {
-        const isMine = p.writer === username;
-        return `
-          <div class="post">
-            <h3>${p.title}</h3>
-            <p>${p.content}</p>
-            <small>by ${p.writer} (${p.school}) / ${new Date(p.createdAt).toLocaleString('ko-KR')}</small> 
-            ${isMine ? `<button class="delete-btn" onclick="deletePost(${p.id})">삭제</button>` : ""}
-          </div>
-        `;
-      }).join('');
-    }
+  let editingPostId = null; // 수정 중인 글 ID 저장
 
-    async function submitPost() {
-      const post = {
-        title: document.getElementById('title').value,
-        content: document.getElementById('content').value,
-        writer: username
-      };
+  function editPost(id, title, content) {
+    document.getElementById('title').value = title;
+    document.getElementById('content').value = content;
+    editingPostId = id;
+    toggleWriteForm();
+  }
 
+  async function submitPost() {
+    const post = {
+      title: document.getElementById('title').value,
+      content: document.getElementById('content').value,
+      writer: username
+    };
+
+    if (editingPostId) {
+      await fetch(`/api/board/free/${editingPostId}?username=${encodeURIComponent(username)}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(post)
+      });
+      editingPostId = null;
+    } else {
       await fetch('/api/board/free', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(post)
       });
-
-      document.getElementById('title').value = '';
-      document.getElementById('content').value = '';
-      toggleWriteForm();
-      loadPosts();
     }
 
-    async function deletePost(id) {
-    	  if (!confirm("정말 삭제하시겠습니까?")) return;
-
-    	  const res = await fetch(`/api/board/free/${id}?username=${encodeURIComponent(username)}`, {
-    	    method: 'DELETE'
-    	  });
-
-    	  if (res.ok) {
-    	    alert("삭제되었습니다.");
-    	    loadPosts();
-    	  } else {
-    	    const message = await res.text();
-    	    alert("삭제 실패: " + message);
-    	  }
-    	}
-
-
+    document.getElementById('title').value = '';
+    document.getElementById('content').value = '';
+    toggleWriteForm();
     loadPosts();
-  </script>
+  }
+
+  async function deletePost(id) {
+    if (!confirm("정말 삭제하시겠습니까?")) return;
+
+    const res = await fetch(`/api/board/free/${id}?username=${encodeURIComponent(username)}`, {
+      method: 'DELETE'
+    });
+
+    if (res.ok) {
+      alert("삭제되었습니다.");
+      loadPosts();
+    } else {
+      const message = await res.text();
+      alert("삭제 실패: " + message);
+    }
+  }
+
+  async function loadPosts() {
+    const res = await fetch('/api/board/free');
+    const posts = (await res.json()).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+    const container = document.getElementById('posts');
+
+    if (posts.length === 0) {
+      container.innerHTML = `
+        <div class="empty-state">
+          <h3>아직 게시글이 없습니다</h3>
+          <p>첫 번째 게시글을 작성해보세요!</p>
+        </div>
+      `;
+      return;
+    }
+
+    container.innerHTML = posts.map(p => {
+      const isMine = p.writer === username;
+      const date = new Date(p.createdAt);
+      const formattedTime = formatTime(date);
+      const school = p.school || '목포대';
+
+      return `
+        <div class="post">
+          <div class="post-header">
+            <div class="post-avatar">${getInitials(p.writer)}</div>
+            <div class="post-user-info">
+              <div class="post-username">${p.writer} <span style="font-weight: normal; font-size: 0.85rem;">(${school})</span></div>
+              <div class="post-meta">${formattedTime}</div>
+            </div>
+          </div>
+          <div class="post-content-container">
+            <div class="post-title">${p.title}</div>
+            <div class="post-content">${p.content}</div>
+          </div>
+          <div class="post-actions">
+            ${isMine ? `
+              <button class="post-action-btn" onclick="editPost(${p.id}, '${p.title}', \`${p.content.replace(/`/g, '\\`')}\`)">
+                <i class="fas fa-edit"></i> 수정
+              </button>
+              <button class="delete-btn" onclick="deletePost(${p.id})">
+                <i class="far fa-trash-alt"></i> 삭제
+              </button>
+            ` : ""}
+            <button class="post-action-btn">
+              <i class="far fa-heart"></i> 좋아요
+            </button>
+            <button class="post-action-btn">
+              <i class="far fa-comment"></i> 댓글
+            </button>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  loadPosts();
+</script>
+
 </body>
 </html>
