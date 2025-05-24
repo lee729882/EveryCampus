@@ -9,11 +9,8 @@ import com.everycampus.entity.User;
 
 public interface UserRepository extends JpaRepository<User, Long> {
     boolean existsByUsername(String username);
-    Optional<User> findByUsername(String username);
+    Optional<User> findByUsername(String username);  // findByUsername 메서드
     Optional<User> findByEmail(String email);
     Optional<User> findByUsernameAndEmail(String username, String email);
-   
-
-   
 
 }

@@ -9,7 +9,7 @@ import lombok.*;
 @Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "\"users\"")  // 또는 다른 예약어가 아닌 이름 사용
+@Table(name = "users_old")  // 새 테이블 이름으로 변경
 @Builder
 public class User {
 

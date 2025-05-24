@@ -321,10 +321,15 @@
       <i class="fa fa-home"></i>
       <span>홈</span>
     </div>
-    <div class="nav-item">
-      <i class="fa fa-calendar"></i>
-      <span>일정</span>
-    </div>
+	<div class="nav-item" onclick="goToTimetable()">
+	  <i class="fa fa-calendar"></i>
+	  <span>일정</span>
+	</div>
+    <script>
+	  function goToTimetable() {
+	    window.location.href = '/timetable.html';
+	  }
+	</script>
     <div class="nav-item ">
       <i class="fa fa-comments"></i>
       <span>채팅</span>
