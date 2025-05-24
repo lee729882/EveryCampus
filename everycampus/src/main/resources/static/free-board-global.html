@@ -33,7 +33,7 @@
       background-color: var(--background);
       color: var(--text);
       line-height: 1.6;
-      padding-bottom: 80px; /* 고정 버튼을 위한 여백 */
+      padding-bottom: 80px;
     }
 
     h2 {
@@ -154,6 +154,127 @@
       background-color: #fff0f0;
     }
 
+    /* 댓글 섹션 스타일 */
+    .comment-section {
+      padding: 15px;
+      border-top: 1px solid var(--border);
+      background-color: #fafafa;
+      display: none; /* 기본적으로 숨김 */
+      max-height: 400px; /* 최대 높이 설정 */
+      overflow-y: auto; /* 세로 스크롤바 */
+    }
+
+    .comment-section.show {
+      display: block; /* 보이기 */
+    }
+
+    .comment-section::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .comment-section::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 3px;
+    }
+
+    .comment-section::-webkit-scrollbar-thumb {
+      background: var(--text-lighter);
+      border-radius: 3px;
+    }
+
+    .comment-section::-webkit-scrollbar-thumb:hover {
+      background: var(--text-light);
+    }
+
+    .comments-container {
+      max-height: 250px; /* 댓글 목록의 최대 높이 */
+      overflow-y: auto;
+      margin-bottom: 10px;
+    }
+
+    .comments-container::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .comments-container::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .comments-container::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 2px;
+    }
+
+    .comment {
+      background-color: var(--card);
+      padding: 10px;
+      margin-bottom: 8px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .comment-content {
+      flex: 1;
+    }
+
+    .comment-actions {
+      display: flex;
+      gap: 5px;
+    }
+
+    .comment-btn {
+      background: none;
+      border: none;
+      color: var(--text-lighter);
+      font-size: 0.8rem;
+      cursor: pointer;
+      padding: 2px 6px;
+      border-radius: 3px;
+      transition: all 0.2s;
+    }
+
+    .comment-btn:hover {
+      background-color: var(--reaction);
+      color: var(--primary);
+    }
+
+    .comment-input-container {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .comment-input-container input {
+      flex: 1;
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      font-size: 0.9rem;
+      outline: none;
+    }
+
+    .comment-input-container input:focus {
+      border-color: var(--primary);
+    }
+
+    .comment-submit-btn {
+      padding: 8px 16px;
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .comment-submit-btn:hover {
+      background-color: var(--primary-hover);
+    }
+
     textarea, input { 
       width: 100%; 
       margin-bottom: 1rem; 
@@ -221,6 +342,23 @@
       z-index: 200;
       justify-content: center;
       align-items: center;
+      animation: fadeIn 0.2s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slideIn {
+      from { 
+        opacity: 0;
+        transform: translateY(-20px) scale(0.95);
+      }
+      to { 
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
     }
 
     /* 모달 컨테이너 */
@@ -232,6 +370,53 @@
       max-width: 500px;
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
       position: relative;
+      animation: slideIn 0.3s ease-out;
+    }
+
+    /* 댓글 수정 모달 (작은 크기) */
+    .comment-edit-modal {
+      max-width: 400px;
+      padding: 1.5rem;
+    }
+
+    .comment-edit-modal h3 {
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+    }
+
+    .comment-edit-modal h3 i {
+      margin-right: 8px;
+      color: var(--primary);
+    }
+
+    .comment-edit-modal textarea {
+      min-height: 80px;
+      resize: vertical;
+      margin-bottom: 1rem;
+    }
+
+    .comment-edit-modal .modal-buttons {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+
+    .comment-edit-modal .modal-buttons button {
+      margin-bottom: 0;
+      padding: 0.5rem 1rem;
+      font-size: 0.9rem;
+    }
+
+    .cancel-btn {
+      background-color: var(--text-lighter);
+      color: white;
+    }
+
+    .cancel-btn:hover {
+      background-color: var(--text-light);
     }
 
     /* 모달 닫기 버튼 */
@@ -251,11 +436,13 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      border-radius: 50%;
+      transition: all 0.2s;
     }
 
     .modal-close:hover {
       color: var(--text);
-      background: none;
+      background-color: var(--background);
     }
 
     .modal h3 {
@@ -309,6 +496,11 @@
         width: 95%;
         padding: 1.5rem;
       }
+
+      .comment-edit-modal {
+        width: 95%;
+        padding: 1rem;
+      }
     }
   </style>
 </head>
@@ -332,99 +524,132 @@
     </div>
   </div>
 
+  <!-- 댓글 수정 모달 -->
+  <div id="commentEditModal" class="modal-backdrop">
+    <div class="modal comment-edit-modal">
+      <button class="modal-close" onclick="toggleCommentEditModal()">×</button>
+      <h3><i class="fas fa-edit"></i>댓글 수정</h3>
+      <textarea id="comment-edit-content" rows="3" placeholder="댓글을 수정해주세요..."></textarea>
+      <div class="modal-buttons">
+        <button class="cancel-btn" onclick="toggleCommentEditModal()">취소</button>
+        <button onclick="confirmEditComment()">수정 완료</button>
+      </div>
+    </div>
+  </div>
+
   <script>
-    // 사용자 이름 가져오기 또는 입력받기
     let username = localStorage.getItem("username");
+    let school = localStorage.getItem("school");
+
     if (!username) {
       username = prompt("닉네임을 입력해주세요:");
-      if (username) {
-        localStorage.setItem("username", username);
-      } else {
-        username = "익명";
-      }
+      localStorage.setItem("username", username || "익명");
     }
 
-    // 인사말 표시
-    document.getElementById('greeting').textContent = `${username}님 안녕하세요!`;
+    if (!school) {
+      school = prompt("소속 학교를 입력해주세요:");
+      localStorage.setItem("school", school || "학교미지정");
+    }
 
-    // 글쓰기 폼 토글
+    document.getElementById("greeting").textContent = `${username}님 (${school}) 안녕하세요!`;
+
+    const currentCategory = "global";
+    let editingPostId = null;
+    let editingCommentId = null;
+
     function toggleWriteForm() {
-      const modal = document.getElementById('writeFormModal');
-      if (modal.style.display === 'flex') {
-        modal.style.display = 'none';
-        document.body.style.overflow = 'auto';
+      const modal = document.getElementById("writeFormModal");
+      if (modal.style.display === "flex") {
+        modal.style.display = "none";
+        document.body.style.overflow = "auto";
       } else {
-        modal.style.display = 'flex';
-        document.body.style.overflow = 'hidden';
+        modal.style.display = "flex";
+        document.body.style.overflow = "hidden";
       }
     }
 
-    // 사용자 이니셜 가져오기
+    function toggleCommentEditModal(content = "", id = null) {
+      const modal = document.getElementById("commentEditModal");
+      const textarea = document.getElementById("comment-edit-content");
+      
+      if (modal.style.display === "flex") {
+        modal.style.display = "none";
+        document.body.style.overflow = "auto";
+        editingCommentId = null;
+      } else {
+        textarea.value = content;
+        editingCommentId = id;
+        modal.style.display = "flex";
+        document.body.style.overflow = "hidden";
+        // 텍스트 영역에 포커스
+        setTimeout(() => textarea.focus(), 100);
+      }
+    }
+
     function getInitials(name) {
       return name.charAt(0).toUpperCase();
     }
 
-    // 날짜 형식 변환
     function formatTime(date) {
       const now = new Date();
       const diff = now - date;
-      
-      // 1분 미만
-      if (diff < 60 * 1000) {
-        return '방금 전';
-      }
-      // 1시간 미만
-      else if (diff < 60 * 60 * 1000) {
-        return `${Math.floor(diff / (60 * 1000))}분 전`;
-      }
-      // 오늘
-      else if (date.getDate() === now.getDate() && 
-               date.getMonth() === now.getMonth() && 
-               date.getFullYear() === now.getFullYear()) {
-        return `오늘 ${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}`;
-      }
-      // 어제
-      else if (date.getDate() === now.getDate() - 1 && 
-               date.getMonth() === now.getMonth() && 
-               date.getFullYear() === now.getFullYear()) {
-        return `어제 ${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}`;
-      }
-      // 그 외
-      else {
+      if (diff < 60000) return "방금 전";
+      else if (diff < 3600000) return `${Math.floor(diff / 60000)}분 전`;
+      else if (date.toDateString() === now.toDateString())
+        return `오늘 ${date.getHours()}:${String(date.getMinutes()).padStart(2, "0")}`;
+      else if (date.getDate() === now.getDate() - 1)
+        return `어제 ${date.getHours()}:${String(date.getMinutes()).padStart(2, "0")}`;
+      else
         return `${date.getFullYear()}.${date.getMonth() + 1}.${date.getDate()}`;
-      }
     }
 
-    // 게시글 목록 불러오기
     async function loadPosts() {
       try {
-        const res = await fetch('/api/board/global'); // global 전용 API
+        const res = await fetch(`/api/board?category=${currentCategory}`);
         const posts = (await res.json()).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
-        const container = document.getElementById('posts');
-
+        const container = document.getElementById("posts");
         if (posts.length === 0) {
-          container.innerHTML = `
-            <div class="empty-state">
-              <h3>아직 게시글이 없습니다</h3>
-              <p>첫 번째 게시글을 작성해보세요!</p>
-            </div>
-          `;
+          container.innerHTML = `<div class="empty-state"><h3>아직 게시글이 없습니다</h3><p>첫 번째 게시글을 작성해보세요!</p></div>`;
           return;
         }
 
-        container.innerHTML = posts.map(p => {
+        const postElements = await Promise.all(posts.map(async p => {
           const isMine = p.writer === username;
           const date = new Date(p.createdAt);
           const formattedTime = formatTime(date);
-          const school = p.school || '대학교';
-          
+          const schoolDisplay = p.school || "학교";
+
+          const commentsRes = await fetch(`/api/comments/${p.id}`);
+          const comments = (await commentsRes.json()).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+          const commentHtml = comments.map(c => {
+            const isMyComment = c.writer === username;
+            return `
+              <div class="comment">
+                <div class="comment-content">
+                  <strong>${c.writer}</strong>: ${c.content}
+                </div>
+                ${isMyComment ? `
+                  <div class="comment-actions">
+                    <button class="comment-btn" onclick="editComment(${c.id}, '${c.content.replace(/'/g, "&#39;")}')">
+                      <i class="fas fa-edit"></i> 수정
+                    </button>
+                    <button class="comment-btn" onclick="deleteComment(${c.id})">
+                      <i class="fas fa-trash"></i> 삭제
+                    </button>
+                  </div>
+                ` : ""}
+              </div>
+            `;
+          }).join('');
+
           return `
             <div class="post">
               <div class="post-header">
                 <div class="post-avatar">${getInitials(p.writer)}</div>
                 <div class="post-user-info">
-                  <div class="post-username">${p.writer} <span style="font-weight: normal; font-size: 0.85rem;">(${school})</span></div>
+                  <div class="post-username">${p.writer} <span style="font-weight: normal; font-size: 0.85rem;">(${schoolDisplay})</span></div>
                   <div class="post-meta">${formattedTime}</div>
                 </div>
               </div>
@@ -436,85 +661,192 @@
                 <button class="post-action-btn">
                   <i class="far fa-heart"></i> 좋아요
                 </button>
-                <button class="post-action-btn">
-                  <i class="far fa-comment"></i> 댓글
+                <button class="post-action-btn" onclick="toggleComments(${p.id})">
+                  <i class="far fa-comment"></i> 댓글 ${comments.length > 0 ? `(${comments.length})` : ''}
                 </button>
-                ${isMine ? `<button class="delete-btn" onclick="deletePost(${p.id})"><i class="far fa-trash-alt"></i> 삭제</button>` : ""}
+                ${isMine ? `
+                  <button class="post-action-btn" onclick="editPost(${p.id}, '${p.title}', \`${p.content.replace(/`/g, '\\`')}\`)"><i class="fas fa-edit"></i> 수정</button>
+                  <button class="delete-btn" onclick="deletePost(${p.id})"><i class="far fa-trash-alt"></i> 삭제</button>
+                ` : ""}
+              </div>
+              <div class="comment-section" id="comments-${p.id}">
+                <div class="comments-container">
+                  ${commentHtml}
+                </div>
+                <div class="comment-input-container">
+                  <input type="text" placeholder="댓글 작성..." id="comment-input-${p.id}" />
+                  <button class="comment-submit-btn" onclick="submitComment(${p.id})">등록</button>
+                </div>
               </div>
             </div>
           `;
-        }).join('');
-      } catch (error) {
-        console.error("게시글을 불러오는 중 오류가 발생했습니다:", error);
-        document.getElementById('posts').innerHTML = `
-          <div class="empty-state">
-            <h3>게시글을 불러올 수 없습니다</h3>
-            <p>잠시 후 다시 시도해주세요.</p>
-          </div>
-        `;
+        }));
+
+        container.innerHTML = postElements.join("");
+      } catch (err) {
+        console.error("불러오기 실패:", err);
       }
     }
 
-    // 게시글 작성
-    async function submitPost() {
-      const title = document.getElementById('title').value;
-      const content = document.getElementById('content').value;
+    async function submitComment(postId) {
+      const input = document.getElementById(`comment-input-${postId}`);
+      const content = input.value.trim();
+      if (!content) return alert("댓글을 입력해주세요");
+
+      await fetch(`/api/comments/${postId}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ writer: username, content })
+      });
+      input.value = '';
       
-      if (!title.trim() || !content.trim()) {
-        alert("제목과 내용을 모두 입력해주세요.");
+      // 현재 열린 댓글창들의 상태를 저장
+      const openComments = [];
+      document.querySelectorAll('.comment-section.show').forEach(section => {
+        openComments.push(section.id);
+      });
+      
+      await loadPosts();
+      
+      // 이전에 열린 댓글창들을 다시 열기
+      openComments.forEach(id => {
+        const section = document.getElementById(id);
+        if (section) section.classList.add('show');
+      });
+    }
+
+    async function deleteComment(id) {
+      if (!confirm("댓글을 삭제하시겠습니까?")) return;
+      await fetch(`/api/comments/${id}?username=${encodeURIComponent(username)}`, { method: 'DELETE' });
+      loadPosts();
+    }
+
+    function editComment(id, content) {
+      toggleCommentEditModal(content, id);
+    }
+
+    async function confirmEditComment() {
+      const content = document.getElementById("comment-edit-content").value.trim();
+      if (!content) {
+        alert("댓글 내용을 입력해주세요.");
         return;
       }
       
-      const post = {
-        title: title,
-        content: content,
-        writer: username
-      };
-
       try {
-        const res = await fetch('/api/board/global', {
-          method: 'POST',
+        await fetch(`/api/comments/${editingCommentId}?username=${encodeURIComponent(username)}`, {
+          method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(post)
+          body: JSON.stringify({ content })
         });
-
-        if (res.ok) {
-          document.getElementById('title').value = '';
-          document.getElementById('content').value = '';
-          toggleWriteForm();
-          loadPosts();
-        } else {
-          alert("게시글 작성에 실패했습니다.");
-        }
+        toggleCommentEditModal();
+        loadPosts();
       } catch (error) {
-        console.error("게시글 작성 중 오류가 발생했습니다:", error);
-        alert("게시글 작성에 실패했습니다. 잠시 후 다시 시도해주세요.");
+        console.error("댓글 수정 실패:", error);
+        alert("댓글 수정에 실패했습니다.");
       }
     }
 
-    // 게시글 삭제
-    async function deletePost(id) {
-      if (!confirm("정말 삭제하시겠습니까?")) return;
+    function editPost(id, title, content) {
+      editingPostId = id;
+      document.getElementById("title").value = title;
+      document.getElementById("content").value = content;
+      toggleWriteForm();
+    }
+
+    async function submitPost() {
+      const title = document.getElementById("title").value.trim();
+      const content = document.getElementById("content").value.trim();
+      if (!title || !content) return alert("제목과 내용을 모두 입력해주세요.");
+
+      const post = { title, content, writer: username, school, category: currentCategory };
 
       try {
-        const res = await fetch(`/api/board/global/${id}?username=${encodeURIComponent(username)}`, {
-          method: 'DELETE'
-        });
+        let res;
+        if (editingPostId) {
+          res = await fetch(`/api/board/${editingPostId}?username=${encodeURIComponent(username)}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(post)
+          });
+          editingPostId = null;
+        } else {
+          res = await fetch('/api/board', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(post)
+          });
+        }
 
+        if (res.ok) {
+          document.getElementById("title").value = '';
+          document.getElementById("content").value = '';
+          toggleWriteForm();
+          loadPosts();
+        } else {
+          alert("작성 또는 수정에 실패했습니다.");
+        }
+      } catch (err) {
+        console.error(err);
+        alert("요청 중 오류가 발생했습니다.");
+      }
+    }
+
+    async function deletePost(id) {
+      if (!confirm("정말 삭제하시겠습니까?")) return;
+      try {
+        const res = await fetch(`/api/board/${id}?username=${encodeURIComponent(username)}`, { method: 'DELETE' });
         if (res.ok) {
           alert("삭제되었습니다.");
           loadPosts();
         } else {
-          const message = await res.text();
-          alert("삭제 실패: " + message);
+          alert("삭제 실패");
         }
-      } catch (error) {
-        console.error("게시글 삭제 중 오류가 발생했습니다:", error);
-        alert("게시글 삭제에 실패했습니다. 잠시 후 다시 시도해주세요.");
+      } catch (err) {
+        console.error("삭제 오류:", err);
       }
     }
 
-    // 페이지 로드 시 게시글 불러오기
+    // 모달 외부 클릭 시 닫기
+    document.addEventListener('click', function(e) {
+      if (e.target.classList.contains('modal-backdrop')) {
+        if (e.target.id === 'writeFormModal') {
+          toggleWriteForm();
+        } else if (e.target.id === 'commentEditModal') {
+          toggleCommentEditModal();
+        }
+      }
+    });
+
+    // ESC 키로 모달 닫기
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        const writeModal = document.getElementById('writeFormModal');
+        const commentModal = document.getElementById('commentEditModal');
+        
+        if (writeModal.style.display === 'flex') {
+          toggleWriteForm();
+        } else if (commentModal.style.display === 'flex') {
+          toggleCommentEditModal();
+        }
+      }
+    });
+
+    function toggleComments(postId) {
+      const commentSection = document.getElementById(`comments-${postId}`);
+      const isVisible = commentSection.classList.contains('show');
+      
+      if (isVisible) {
+        commentSection.classList.remove('show');
+      } else {
+        commentSection.classList.add('show');
+        // 댓글창이 열릴 때 입력창에 포커스
+        setTimeout(() => {
+          const input = document.getElementById(`comment-input-${postId}`);
+          if (input) input.focus();
+        }, 100);
+      }
+    }
+
     loadPosts();
   </script>
 </body>
