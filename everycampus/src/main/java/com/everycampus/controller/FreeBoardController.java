@@ -25,17 +25,26 @@ public class FreeBoardController {
     private final BoardLikeRepository boardLikeRepository;
 
     // 게시글 목록 조회
+ // 게시글 목록 조회
     @GetMapping
     public List<FreeBoard> list(
             @RequestParam(name = "school", required = false) String school,
             @RequestParam(name = "category") String category
     ) {
-        if (school != null) {
-            return freeBoardRepository.findBySchoolAndCategoryOrderByCreatedAtDesc(school, category);
-        } else {
+        // 통합 게시판일 경우: school 상관없이 전체 조회
+        if ("global".equalsIgnoreCase(category)) {
             return freeBoardRepository.findByCategoryOrderByCreatedAtDesc(category);
         }
+
+        // 특정 학교 + 게시판 조회
+        if (school != null) {
+            return freeBoardRepository.findBySchoolAndCategoryOrderByCreatedAtDesc(school, category);
+        }
+
+        // fallback (예외 상황)
+        return Collections.emptyList();
     }
+
 
     // 게시글 작성
     @PostMapping
