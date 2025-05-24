@@ -999,7 +999,8 @@ function getLikeState(postId) {
               </div>
               ${isMyComment ? `
                 <div class="comment-actions">
-                  <button class="comment-btn" onclick="editComment(${c.id}, '${c.content.replace(/'/g, "&#39;")}')">
+            		<button class="comment-btn" onclick="editComment(${c.id}, '${(c.content || '').replace(/'/g, "&#39;")}')">
+
                     <i class="fas fa-edit"></i> 수정
                   </button>
                   <button class="comment-btn" onclick="deleteComment(${c.id})">
@@ -1032,7 +1033,8 @@ function getLikeState(postId) {
                 <i class="far fa-comment"></i> 댓글 ${comments.length > 0 ? `(${comments.length})` : ''}
               </button>
               ${isMine ? `
-                <button class="post-action-btn" onclick="editPost(${p.id}, '${p.title}', \`${p.content.replace(/`/g, '\\`')}\`)">
+        		  <button class="post-action-btn" onclick="editPost(${p.id}, '${(p.title || '').replace(/'/g, "\\'")}', \`${(p.content || '').replace(/`/g, '\\`')}\`)">
+
                   <i class="fas fa-edit"></i> 수정
                 </button>
                 <button class="delete-btn" onclick="deletePost(${p.id})">

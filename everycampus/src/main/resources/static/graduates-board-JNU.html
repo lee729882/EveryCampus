@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>순천대 자유게시판</title>
+  <title>전남대 졸업생게시판</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap">
   <style>
@@ -573,7 +573,7 @@
   </style>
 </head>
 <body>
-  <h2>순천대 자유게시판</h2>
+  <h2>전남대 졸업생게시판</h2>
   <p id="greeting"></p>
 
   <div id="posts"></div>
@@ -620,8 +620,8 @@
 
   document.getElementById('greeting').textContent = `${username}님 안녕하세요!`;
 
-  const currentSchool = "순천대학교";
-  const currentCategory = "free";
+  const currentSchool = "전남대학교";
+  const currentCategory = "graduates";
   let editingPostId = null;
   let editingCommentId = null;
 
@@ -961,7 +961,7 @@ function getLikeState(postId) {
         const isMine = p.writer === username;
         const date = new Date(p.createdAt);
         const formattedTime = formatTime(date);
-        const school = p.school || '순천대';
+        const school = p.school || '전남대';
 
         // 댓글 가져오기 및 최신순 정렬
         const commentsRes = await fetch(`/api/comments/${p.id}`);
