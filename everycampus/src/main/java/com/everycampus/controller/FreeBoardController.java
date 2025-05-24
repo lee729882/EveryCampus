@@ -1,7 +1,9 @@
 package com.everycampus.controller;
 
+import com.everycampus.entity.BoardLike;
 import com.everycampus.entity.FreeBoard;
 import com.everycampus.entity.User;
+import com.everycampus.repository.BoardLikeRepository;
 import com.everycampus.repository.FreeBoardRepository;
 import com.everycampus.repository.UserRepository;
 
@@ -11,8 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/board")
@@ -21,12 +22,13 @@ public class FreeBoardController {
 
     private final FreeBoardRepository freeBoardRepository;
     private final UserRepository userRepository;
+    private final BoardLikeRepository boardLikeRepository;
 
-    // 전체 게시글 조회
+    // 게시글 목록 조회
     @GetMapping
     public List<FreeBoard> list(
-      @RequestParam(name = "school", required = false) String school,
-      @RequestParam(name = "category") String category
+            @RequestParam(name = "school", required = false) String school,
+            @RequestParam(name = "category") String category
     ) {
         if (school != null) {
             return freeBoardRepository.findBySchoolAndCategoryOrderByCreatedAtDesc(school, category);
@@ -34,8 +36,6 @@ public class FreeBoardController {
             return freeBoardRepository.findByCategoryOrderByCreatedAtDesc(category);
         }
     }
-
-
 
     // 게시글 작성
     @PostMapping
@@ -45,8 +45,9 @@ public class FreeBoardController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
 
-        board.setSchool(optionalUser.get().getSchool()); // 또는 클라이언트에서 전달
+        board.setSchool(optionalUser.get().getSchool());
         board.setCreatedAt(LocalDateTime.now());
+        board.setLikeCount(0);  // 기본값 설정
         FreeBoard saved = freeBoardRepository.save(board);
         return ResponseEntity.ok(saved);
     }
@@ -67,7 +68,6 @@ public class FreeBoardController {
         post.setTitle(updatedPost.getTitle());
         post.setContent(updatedPost.getContent());
         freeBoardRepository.save(post);
-
         return ResponseEntity.ok(post);
     }
 
@@ -83,7 +83,52 @@ public class FreeBoardController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("삭제 권한이 없습니다.");
         }
 
+        // 게시글 삭제 시 좋아요 기록도 삭제 (옵션)
+        boardLikeRepository.deleteByPostId(id);
+
         freeBoardRepository.delete(post);
         return ResponseEntity.ok().build();
+    }
+
+    // 좋아요 토글 (누르면 추가, 다시 누르면 취소)
+    @PostMapping("/{id}/like")
+    public ResponseEntity<?> toggleLike(@PathVariable("id") Long postId,
+                                        @RequestParam("username") String username) {
+        Optional<FreeBoard> optionalPost = freeBoardRepository.findById(postId);
+        if (optionalPost.isEmpty()) return ResponseEntity.notFound().build();
+
+        FreeBoard post = optionalPost.get();
+        boolean isLiked = boardLikeRepository.existsByPostIdAndUsername(postId, username);
+
+        if (isLiked) {
+            boardLikeRepository.deleteByPostIdAndUsername(postId, username);
+            post.setLikeCount(Math.max(0, post.getLikeCount() - 1));
+        } else {
+            boardLikeRepository.save(new BoardLike(postId, username));
+            post.setLikeCount(post.getLikeCount() + 1);
+        }
+
+        freeBoardRepository.save(post);
+
+        return ResponseEntity.ok(Map.of(
+                "isLiked", !isLiked,
+                "likeCount", post.getLikeCount()
+        ));
+    }
+
+    // 좋아요 상태 확인
+    @GetMapping("/{id}/like")
+    public ResponseEntity<?> getLikeStatus(@PathVariable("id") Long postId,
+                                           @RequestParam("username") String username) {
+        Optional<FreeBoard> optionalPost = freeBoardRepository.findById(postId);
+        if (optionalPost.isEmpty()) return ResponseEntity.notFound().build();
+
+        FreeBoard post = optionalPost.get();
+        boolean isLiked = boardLikeRepository.existsByPostIdAndUsername(postId, username);
+
+        return ResponseEntity.ok(Map.of(
+                "isLiked", isLiked,
+                "likeCount", post.getLikeCount()
+        ));
     }
 }

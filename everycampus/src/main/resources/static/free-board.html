@@ -8,17 +8,17 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap">
   <style>
     :root {
-      --primary: #4263eb;
-      --primary-hover: #3b5bdb;
-      --danger: #e03131;
-      --danger-hover: #c92a2a;
+      --primary: #007bff;
+      --primary-hover: #0056b3;
+      --danger: #dc3545;
+      --danger-hover: #c82333;
       --text: #333;
       --text-light: #666;
-      --text-lighter: #888;
-      --border: #e9ecef;
+      --text-lighter: #999;
+      --border: #dee2e6;
       --background: #f8f9fa;
       --card: #fff;
-      --reaction: #f0f2ff;
+      --reaction: #e9ecef;
     }
 
     * {
@@ -125,7 +125,7 @@
       padding: 5px 10px;
       border-radius: 4px;
       margin-right: 10px;
-      transition: background-color 0.2s;
+      transition: all 0.2s;
     }
 
     .post-action-btn:hover {
@@ -135,6 +135,52 @@
 
     .post-action-btn i {
       margin-right: 5px;
+    }
+
+    /* 좋아요 버튼 특별 스타일 */
+    .like-btn {
+  transition: all 0.3s ease;
+}
+
+.like-btn.liked {
+  color: #dc3545 !important;
+  background-color: rgba(220, 53, 69, 0.1) !important;
+}
+
+.like-btn.liked:hover {
+  color: #c82333 !important;
+  background-color: rgba(220, 53, 69, 0.2) !important;
+}
+
+.like-btn.liked i {
+  color: #dc3545 !important;
+  animation: heartBeat 0.6s ease;
+}
+
+/* 좋아요 안한 상태 */
+.like-btn:not(.liked) {
+  color: var(--text-light);
+}
+
+.like-btn:not(.liked):hover {
+  background-color: var(--reaction);
+  color: var(--primary);
+}
+
+.like-btn:not(.liked) i {
+  color: var(--text-lighter);
+}
+
+.like-btn:not(.liked):hover i {
+  color: var(--primary);
+}
+
+    @keyframes heartBeat {
+      0% { transform: scale(1); }
+      25% { transform: scale(1.2); }
+      50% { transform: scale(1); }
+      75% { transform: scale(1.1); }
+      100% { transform: scale(1); }
     }
 
     .delete-btn {
@@ -159,13 +205,13 @@
       padding: 15px;
       border-top: 1px solid var(--border);
       background-color: #fafafa;
-      display: none; /* 기본적으로 숨김 */
-      max-height: 400px; /* 최대 높이 설정 */
-      overflow-y: auto; /* 세로 스크롤바 */
+      display: none;
+      max-height: 400px;
+      overflow-y: auto;
     }
 
     .comment-section.show {
-      display: block; /* 보이기 */
+      display: block;
     }
 
     .comment-section::-webkit-scrollbar {
@@ -187,7 +233,7 @@
     }
 
     .comments-container {
-      max-height: 250px; /* 댓글 목록의 최대 높이 */
+      max-height: 250px;
       overflow-y: auto;
       margin-bottom: 10px;
     }
@@ -254,6 +300,7 @@
       border-radius: 20px;
       font-size: 0.9rem;
       outline: none;
+      font-family: 'Noto Sans KR', sans-serif;
     }
 
     .comment-input-container input:focus {
@@ -269,6 +316,7 @@
       font-size: 0.9rem;
       cursor: pointer;
       transition: background-color 0.2s;
+      font-family: 'Noto Sans KR', sans-serif;
     }
 
     .comment-submit-btn:hover {
@@ -303,6 +351,7 @@
       margin-bottom: 1rem;
       font-weight: 500;
       transition: background-color 0.2s, transform 0.1s;
+      font-family: 'Noto Sans KR', sans-serif;
     }
 
     button:hover {
@@ -313,7 +362,6 @@
       transform: translateY(1px);
     }
 
-    /* 고정 글쓰기 버튼 스타일 */
     .write-btn-fixed {
       position: fixed;
       bottom: 20px;
@@ -334,7 +382,6 @@
       margin-right: 8px;
     }
 
-    /* 모달 배경 */
     .modal-backdrop {
       display: none;
       position: fixed;
@@ -365,7 +412,6 @@
       }
     }
 
-    /* 모달 컨테이너 */
     .modal {
       background-color: var(--card);
       border-radius: 12px;
@@ -377,7 +423,6 @@
       animation: slideIn 0.3s ease-out;
     }
 
-    /* 댓글 수정 모달 (작은 크기) */
     .comment-edit-modal {
       max-width: 400px;
       padding: 1.5rem;
@@ -423,7 +468,6 @@
       background-color: var(--text-light);
     }
 
-    /* 모달 닫기 버튼 */
     .modal-close {
       position: absolute;
       top: 15px;
@@ -505,6 +549,26 @@
         width: 95%;
         padding: 1rem;
       }
+
+      .comment-input-container {
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .comment-submit-btn {
+        align-self: flex-end;
+        width: auto;
+      }
+
+      .comment {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+      }
+
+      .comment-actions {
+        align-self: flex-end;
+      }
     }
   </style>
 </head>
@@ -544,7 +608,6 @@
   </div>
 
   <script>
-  // 사용자 이름 가져오거나 요청
   let username = localStorage.getItem("username");
   if (!username) {
     username = prompt("닉네임을 입력해주세요:");
@@ -555,8 +618,12 @@
     }
   }
 
-  // 인사말 표시
   document.getElementById('greeting').textContent = `${username}님 안녕하세요!`;
+
+  const currentSchool = "목포대학교";
+  const currentCategory = "free";
+  let editingPostId = null;
+  let editingCommentId = null;
 
   function toggleWriteForm() {
     const modal = document.getElementById('writeFormModal');
@@ -569,38 +636,6 @@
     }
   }
 
-  function getInitials(name) {
-    return name.charAt(0).toUpperCase();
-  }
-
-  function formatTime(date) {
-    const now = new Date();
-    const diff = now - date;
-
-    if (diff < 60 * 1000) return '방금 전';
-    else if (diff < 60 * 60 * 1000) return `${Math.floor(diff / (60 * 1000))}분 전`;
-    else if (date.toDateString() === now.toDateString())
-      return `오늘 ${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}`;
-    else if (date.getDate() === now.getDate() - 1)
-      return `어제 ${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}`;
-    else
-      return `${date.getFullYear()}.${date.getMonth() + 1}.${date.getDate()}`;
-  }
-
-  let editingPostId = null; // 수정 중인 글 ID 저장
-  let editingCommentId = null; // 수정 중인 댓글 ID 저장
- 
-  const currentSchool = "목포대학교";      // 현재 학교명
-  const currentCategory = "free";     // 현재 게시판 종류
-
-  function editPost(id, title, content) {
-    document.getElementById('title').value = title;
-    document.getElementById('content').value = content;
-    editingPostId = id;
-    toggleWriteForm();
-  }
-
-  // 댓글 수정 모달 토글 함수
   function toggleCommentEditModal(content = "", id = null) {
     const modal = document.getElementById("commentEditModal");
     const textarea = document.getElementById("comment-edit-content");
@@ -614,10 +649,138 @@
       editingCommentId = id;
       modal.style.display = "flex";
       document.body.style.overflow = "hidden";
-      // 텍스트 영역에 포커스
       setTimeout(() => textarea.focus(), 100);
     }
   }
+
+  function getInitials(name) {
+    return name.charAt(0).toUpperCase();
+  }
+
+  function formatTime(date) {
+    const now = new Date();
+    const diff = now - date;
+    if (diff < 60000) return "방금 전";
+    else if (diff < 3600000) return `${Math.floor(diff / 60000)}분 전`;
+    else if (date.toDateString() === now.toDateString()) 
+      return `오늘 ${date.getHours()}:${String(date.getMinutes()).padStart(2, "0")}`;
+    else if (date.getDate() === now.getDate() - 1) 
+      return `어제 ${date.getHours()}:${String(date.getMinutes()).padStart(2, "0")}`;
+    else 
+      return `${date.getFullYear()}.${date.getMonth() + 1}.${date.getDate()}`;
+  }
+
+  // 좋아요 상태 로컬 스토리지 관리 함수들
+  function saveLikeState(postId, isLiked) {
+  const likeStates = JSON.parse(localStorage.getItem(`likes_${username}`) || '{}');
+  if (isLiked) {
+    likeStates[postId] = true;
+  } else {
+    delete likeStates[postId];
+  }
+  localStorage.setItem(`likes_${username}`, JSON.stringify(likeStates));
+}
+
+function getLikeState(postId) {
+  const likeStates = JSON.parse(localStorage.getItem(`likes_${username}`) || '{}');
+  return !!likeStates[postId];
+}
+
+  // 좋아요 토글 함수 (로컬 스토리지 연동)
+  async function toggleLike(id) {
+  const likeBtn = document.querySelector(`[onclick="toggleLike(${id})"]`);
+  const isCurrentlyLiked = likeBtn.classList.contains('liked');
+  const heartIcon = likeBtn.querySelector('i');
+  
+  // 현재 좋아요 개수 추출
+  const currentText = likeBtn.textContent.trim();
+  const matches = currentText.match(/좋아요\s*(\d+)?/);
+  const currentCount = matches && matches[1] ? parseInt(matches[1]) : 0;
+  
+  // 즉시 UI 업데이트 및 로컬 스토리지 저장
+  if (isCurrentlyLiked) {
+    // 좋아요 취소
+    likeBtn.classList.remove('liked');
+    heartIcon.className = 'far fa-heart';
+    const newCount = Math.max(0, currentCount - 1);
+    likeBtn.innerHTML = `<i class="far fa-heart"></i> 좋아요${newCount > 0 ? ' ' + newCount : ''}`;
+    saveLikeState(id, false);
+  } else {
+    // 좋아요 추가
+    likeBtn.classList.add('liked');
+    heartIcon.className = 'fas fa-heart';
+    const newCount = currentCount + 1;
+    likeBtn.innerHTML = `<i class="fas fa-heart"></i> 좋아요 ${newCount}`;
+    saveLikeState(id, true);
+  }
+
+  try {
+    const res = await fetch(`/api/board/${id}/like?username=${encodeURIComponent(username)}`, {
+      method: 'POST'
+    });
+    
+    if (res.ok) {
+      // 성공 시 서버에서 최신 상태 가져오기
+      const result = await res.json();
+      const serverLiked = result.isLiked || result.liked;
+      const serverCount = result.likeCount || 0;
+      
+      // 서버 상태로 UI 동기화 및 로컬 스토리지 업데이트
+      if (serverLiked) {
+        likeBtn.classList.add('liked');
+        likeBtn.innerHTML = `<i class="fas fa-heart"></i> 좋아요${serverCount > 0 ? ' ' + serverCount : ''}`;
+        saveLikeState(id, true);
+      } else {
+        likeBtn.classList.remove('liked');
+        likeBtn.innerHTML = `<i class="far fa-heart"></i> 좋아요${serverCount > 0 ? ' ' + serverCount : ''}`;
+        saveLikeState(id, false);
+      }
+      
+      // 현재 열린 댓글창들의 상태를 저장
+      const openComments = [];
+      document.querySelectorAll('.comment-section.show').forEach(section => {
+        openComments.push(section.id);
+      });
+      
+      // 이전에 열린 댓글창들을 다시 열기
+      openComments.forEach(id => {
+        const section = document.getElementById(id);
+        if (section) section.classList.add('show');
+      });
+    } else {
+      // 실패 시 원래 상태로 되돌리기
+      if (isCurrentlyLiked) {
+        likeBtn.classList.add('liked');
+        likeBtn.innerHTML = `<i class="fas fa-heart"></i> 좋아요${currentCount > 0 ? ' ' + currentCount : ''}`;
+        saveLikeState(id, true);
+      } else {
+        likeBtn.classList.remove('liked');
+        likeBtn.innerHTML = `<i class="far fa-heart"></i> 좋아요${currentCount > 0 ? ' ' + currentCount : ''}`;
+        saveLikeState(id, false);
+      }
+      
+      if (res.status === 409) {
+        alert("이미 좋아요를 누르셨습니다.");
+      } else {
+        alert("좋아요 처리에 실패했습니다.");
+      }
+    }
+  } catch (error) {
+    console.error("좋아요 오류:", error);
+    alert("좋아요 처리 중 오류가 발생했습니다.");
+    
+    // 실패 시 원래 상태로 되돌리기
+    if (isCurrentlyLiked) {
+      likeBtn.classList.add('liked');
+      likeBtn.innerHTML = `<i class="fas fa-heart"></i> 좋아요${currentCount > 0 ? ' ' + currentCount : ''}`;
+      saveLikeState(id, true);
+    } else {
+      likeBtn.classList.remove('liked');
+      likeBtn.innerHTML = `<i class="far fa-heart"></i> 좋아요${currentCount > 0 ? ' ' + currentCount : ''}`;
+      saveLikeState(id, false);
+    }
+  }
+}
 
   // 댓글창 토글 함수
   function toggleComments(postId) {
@@ -628,7 +791,6 @@
       commentSection.classList.remove('show');
     } else {
       commentSection.classList.add('show');
-      // 댓글창이 열릴 때 입력창에 포커스
       setTimeout(() => {
         const input = document.getElementById(`comment-input-${postId}`);
         if (input) input.focus();
@@ -642,33 +804,43 @@
     const content = input.value.trim();
     if (!content) return alert("댓글을 입력해주세요");
 
-    await fetch(`/api/comments/${postId}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ writer: username, content })
-    });
-    input.value = '';
-    
-    // 현재 열린 댓글창들의 상태를 저장
-    const openComments = [];
-    document.querySelectorAll('.comment-section.show').forEach(section => {
-      openComments.push(section.id);
-    });
-    
-    await loadPosts();
-    
-    // 이전에 열린 댓글창들을 다시 열기
-    openComments.forEach(id => {
-      const section = document.getElementById(id);
-      if (section) section.classList.add('show');
-    });
+    try {
+      await fetch(`/api/comments/${postId}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ writer: username, content })
+      });
+      input.value = '';
+      
+      // 현재 열린 댓글창들의 상태를 저장
+      const openComments = [];
+      document.querySelectorAll('.comment-section.show').forEach(section => {
+        openComments.push(section.id);
+      });
+      
+      await loadPosts();
+      
+      // 이전에 열린 댓글창들을 다시 열기
+      openComments.forEach(id => {
+        const section = document.getElementById(id);
+        if (section) section.classList.add('show');
+      });
+    } catch (error) {
+      console.error("댓글 작성 실패:", error);
+      alert("댓글 작성에 실패했습니다.");
+    }
   }
 
   // 댓글 삭제 함수
   async function deleteComment(id) {
     if (!confirm("댓글을 삭제하시겠습니까?")) return;
-    await fetch(`/api/comments/${id}?username=${encodeURIComponent(username)}`, { method: 'DELETE' });
-    loadPosts();
+    try {
+      await fetch(`/api/comments/${id}?username=${encodeURIComponent(username)}`, { method: 'DELETE' });
+      loadPosts();
+    } catch (error) {
+      console.error("댓글 삭제 실패:", error);
+      alert("댓글 삭제에 실패했습니다.");
+    }
   }
 
   // 댓글 수정 함수
@@ -698,59 +870,82 @@
     }
   }
 
+  function editPost(id, title, content) {
+    document.getElementById('title').value = title;
+    document.getElementById('content').value = content;
+    editingPostId = id;
+    toggleWriteForm();
+  }
+
   async function submitPost() {
+    const title = document.getElementById('title').value.trim();
+    const content = document.getElementById('content').value.trim();
+    
+    if (!title || !content) {
+      alert("제목과 내용을 모두 입력해주세요.");
+      return;
+    }
+
     const post = {
-      title: document.getElementById('title').value,
-      content: document.getElementById('content').value,
+      title: title,
+      content: content,
       writer: username,
       school: currentSchool,
       category: currentCategory
     };
 
-    if (editingPostId) {
-      await fetch(`/api/board/${editingPostId}?username=${encodeURIComponent(username)}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(post)
-      });
-      editingPostId = null;
-    } else {
-      await fetch('/api/board', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(post)
-      });
+    try {
+      if (editingPostId) {
+        await fetch(`/api/board/${editingPostId}?username=${encodeURIComponent(username)}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(post)
+        });
+        editingPostId = null;
+      } else {
+        await fetch('/api/board', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(post)
+        });
+      }
+      
+      document.getElementById('title').value = '';
+      document.getElementById('content').value = '';
+      toggleWriteForm();
+      loadPosts();
+    } catch (error) {
+      console.error("게시글 작성/수정 실패:", error);
+      alert("게시글 작성/수정에 실패했습니다.");
     }
-    document.getElementById('title').value = '';
-    document.getElementById('content').value = '';
-    toggleWriteForm();
-    loadPosts();
   }
 
   async function deletePost(id) {
     if (!confirm("정말 삭제하시겠습니까?")) return;
 
-    // 삭제 요청
-    const res = await fetch(`/api/board/${id}?username=${encodeURIComponent(username)}`, {
-      method: 'DELETE'
-    });
+    try {
+      const res = await fetch(`/api/board/${id}?username=${encodeURIComponent(username)}`, {
+        method: 'DELETE'
+      });
 
-    if (res.ok) {
-      alert("삭제되었습니다.");
-      loadPosts();
-    } else {
-      const message = await res.text();
-      alert("삭제 실패: " + message);
+      if (res.ok) {
+        alert("삭제되었습니다.");
+        loadPosts();
+      } else {
+        const message = await res.text();
+        alert("삭제 실패: " + message);
+      }
+    } catch (error) {
+      console.error("게시글 삭제 실패:", error);
+      alert("게시글 삭제에 실패했습니다.");
     }
   }
 
   async function loadPosts() {
     try {
-      // 게시글 조회
       const res = await fetch(`/api/board?school=${currentSchool}&category=${currentCategory}`);
       const posts = (await res.json()).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-
-      const container = document.getElementById('posts');
+      const container = document.getElementById("posts");
 
       if (posts.length === 0) {
         container.innerHTML = `
@@ -771,6 +966,28 @@
         // 댓글 가져오기 및 최신순 정렬
         const commentsRes = await fetch(`/api/comments/${p.id}`);
         const comments = (await commentsRes.json()).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+        // 좋아요 상태 확인 (서버 우선, 로컬 스토리지는 캐시)
+        let isLiked = false;
+        let likeCount = p.likeCount ?? 0;
+
+        try {
+          const likeRes = await fetch(`/api/board/${p.id}/like?username=${encodeURIComponent(username)}`);
+          if (likeRes.ok) {
+            const likeData = await likeRes.json();
+            isLiked = likeData.isLiked || likeData.liked;
+            likeCount = likeData.likeCount || 0;
+            // 서버 상태를 로컬 스토리지에 캐시
+            saveLikeState(p.id, isLiked);
+          } else {
+            // 서버 오류 시 로컬 스토리지 사용
+            isLiked = getLikeState(p.id);
+          }
+        } catch (error) {
+          console.error("좋아요 상태 확인 실패:", error);
+          // 네트워크 오류 시 로컬 스토리지 사용
+          isLiked = getLikeState(p.id);
+        }
 
         // 댓글 HTML 생성
         const commentHtml = comments.map(c => {
@@ -808,8 +1025,8 @@
               <div class="post-content">${p.content}</div>
             </div>
             <div class="post-actions">
-              <button class="post-action-btn">
-                <i class="far fa-heart"></i> 좋아요
+              <button class="post-action-btn like-btn ${isLiked ? 'liked' : ''}" onclick="toggleLike(${p.id})">
+                <i class="fa${isLiked ? 's' : 'r'} fa-heart"></i> 좋아요${likeCount > 0 ? ' ' + likeCount : ''}
               </button>
               <button class="post-action-btn" onclick="toggleComments(${p.id})">
                 <i class="far fa-comment"></i> 댓글 ${comments.length > 0 ? `(${comments.length})` : ''}
@@ -873,6 +1090,7 @@
     }
   });
 
+  // 페이지 로드 시 실행
   loadPosts();
   </script>
 </body>
