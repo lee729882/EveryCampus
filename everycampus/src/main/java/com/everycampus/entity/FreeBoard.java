@@ -4,9 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
-
+import java.util.*;
 
 @Entity
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
@@ -35,4 +33,8 @@ public class FreeBoard {
     @CollectionTable(name = "post_likes", joinColumns = @JoinColumn(name = "post_id"))
     @Column(name = "username")
     private Set<String> likedUsers = new HashSet<>();
+
+    // 댓글과의 연관관계 설정 (양방향) - 댓글달린 게시물 삭제되자 않는 문제 해결책
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
 }

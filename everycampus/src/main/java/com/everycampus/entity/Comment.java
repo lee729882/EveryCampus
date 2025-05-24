@@ -1,3 +1,4 @@
+// ✅ Comment.java
 package com.everycampus.entity;
 
 import jakarta.persistence.*;
@@ -6,7 +7,7 @@ import java.time.LocalDateTime;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name = "comments")  // ✅ 예약어 회피
+@Table(name = "comments")
 @Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,14 +19,12 @@ public class Comment {
     private Long id;
 
     private String writer;
-
     private String content;
 
     private LocalDateTime createdAt = LocalDateTime.now();
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "board_id")
-    @JsonIgnore  // ✅ JSON 응답에서 board 필드 제외
-    private FreeBoard board;
+    @JoinColumn(name = "board_id", nullable = false)  // DB 컬럼명과 일치시킴
+    @JsonIgnore
+    private FreeBoard post;
 }
-
