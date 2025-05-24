@@ -2,9 +2,13 @@ package com.everycampus.entity;
 
 import java.time.LocalDateTime;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,14 +27,15 @@ public class BoardLike {
     private Long postId;
 
     @Id
+    @Column(length = 1000)
     private String username;
 
     private LocalDateTime likedAt;
 
-    // ✅ postId, username으로 생성 시 likedAt은 현재 시간으로 설정
     public BoardLike(Long postId, String username) {
         this.postId = postId;
         this.username = username;
         this.likedAt = LocalDateTime.now();
     }
 }
+
