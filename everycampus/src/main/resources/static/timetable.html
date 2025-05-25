@@ -110,12 +110,14 @@
       timetableData.forEach((row, i) => {
         const tr = document.createElement("tr");
         tr.innerHTML = `
-          <td>${row.time}</td>
-          <td contenteditable="true" oninput="updateTimetable(${i}, 'mon', this.innerText)">${row.mon}</td>
-          <td contenteditable="true" oninput="updateTimetable(${i}, 'tue', this.innerText)">${row.tue}</td>
-          <td contenteditable="true" oninput="updateTimetable(${i}, 'wed', this.innerText)">${row.wed}</td>
-          <td contenteditable="true" oninput="updateTimetable(${i}, 'thu', this.innerText)">${row.thu}</td>
-          <td contenteditable="true" oninput="updateTimetable(${i}, 'fri', this.innerText)">${row.fri}</td>
+        	<tr>
+        	  <td>${row.time}</td>
+        	  <td contenteditable="true" oninput="updateTimetable(${i}, 'mon', this.innerText)">${row.mon || '&nbsp;'}</td>
+        	  <td contenteditable="true" oninput="updateTimetable(${i}, 'tue', this.innerText)">${row.tue || '&nbsp;'}</td>
+        	  <td contenteditable="true" oninput="updateTimetable(${i}, 'wed', this.innerText)">${row.wed || '&nbsp;'}</td>
+        	  <td contenteditable="true" oninput="updateTimetable(${i}, 'thu', this.innerText)">${row.thu || '&nbsp;'}</td>
+        	  <td contenteditable="true" oninput="updateTimetable(${i}, 'fri', this.innerText)">${row.fri || '&nbsp;'}</td>
+        	</tr>
         `;
         tbody.appendChild(tr);
       });
@@ -170,6 +172,7 @@
     // 시작 시 로딩
     document.addEventListener("DOMContentLoaded", () => {
       initTimetable();
+      renderTimetable();  // 이걸 먼저 호출
       loadTimetableFromServer();
     });
   </script>
