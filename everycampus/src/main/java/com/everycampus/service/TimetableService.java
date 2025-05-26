@@ -69,11 +69,9 @@ public class TimetableService {
     // 특정 studentId에 해당하는 시간표 조회
     public List<Timetable> getTimetableByStudentId(String studentId) {
         List<Timetable> timetableList = timetableRepository.findByStudentId(studentId);
-        for (Timetable timetable : timetableList) {
-            System.out.println("시간표 항목: " + timetable); // toString()이 호출됩니다.
-        }
         timetableList.removeIf(timetable -> timetable.getSubject() == null || timetable.getSubject().isEmpty());
         return timetableList;
     }
+    
 }
 

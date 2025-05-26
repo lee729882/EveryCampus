@@ -9,6 +9,10 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Timetable {
+	@ManyToOne
+	@JoinColumn(name = "user_id")
+	private User user;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Oracle 12c 이상에서 사용 가능
     private Long id;

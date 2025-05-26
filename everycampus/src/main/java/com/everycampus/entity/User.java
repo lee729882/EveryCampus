@@ -1,5 +1,7 @@
 package com.everycampus.entity;
 
+import java.util.ArrayList;
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,6 +14,8 @@ import lombok.*;
 @Table(name = "users_old")  // 새 테이블 이름으로 변경
 @Builder
 public class User {
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+	private java.util.List<Timetable> timetables = new ArrayList<>();
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

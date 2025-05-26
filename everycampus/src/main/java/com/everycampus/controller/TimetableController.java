@@ -48,13 +48,16 @@ public class TimetableController {
     }
 
 
-    // 시간표 불러오기
     @GetMapping("/load/{studentId}")
+    @ResponseBody
     public ResponseEntity<List<Timetable>> loadTimetable(@PathVariable String studentId) {
         List<Timetable> timetable = timetableService.getTimetableByStudentId(studentId);
         if (timetable.isEmpty()) {
-            return ResponseEntity.notFound().build();  // 시간표가 없으면 404 Not Found
+            return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(timetable);
     }
+
+    
+    
 }

@@ -71,19 +71,23 @@
 <body>
   <h2>나의 시간표</h2>
 
-  <table id="timetable-table">
-    <thead>
-      <tr>
-        <th>시간</th>
-        <th>월</th>
-        <th>화</th>
-        <th>수</th>
-        <th>목</th>
-        <th>금</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
+<table id="timetable-table">
+  <thead>
+    <tr>
+      <th>시간</th>
+      <th>월</th>
+      <th>화</th>
+      <th>수</th>
+      <th>목</th>
+      <th>금</th>
+    </tr>
+  </thead>
+  <tbody>
+    <!-- 여기 내용은 JS로 채워짐 -->
+  </tbody>
+</table>
+
+
 
   <div class="button-container">
     <button onclick="loadTimetableFromServer()">시간표 불러오기</button>
@@ -105,31 +109,35 @@
     }
 
     function renderTimetable() {
-      const tbody = document.querySelector("#timetable-table tbody");
-      tbody.innerHTML = "";
-      timetableData.forEach((row, i) => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td>${row.time}</td>
-          <td contenteditable="true" oninput="updateTimetable(${i}, 'mon', this.innerText)">${row.mon}</td>
-          <td contenteditable="true" oninput="updateTimetable(${i}, 'tue', this.innerText)">${row.tue}</td>
-          <td contenteditable="true" oninput="updateTimetable(${i}, 'wed', this.innerText)">${row.wed}</td>
-          <td contenteditable="true" oninput="updateTimetable(${i}, 'thu', this.innerText)">${row.thu}</td>
-          <td contenteditable="true" oninput="updateTimetable(${i}, 'fri', this.innerText)">${row.fri}</td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
+    	  const tbody = document.querySelector("#timetable-table tbody");
+    	  tbody.innerHTML = "";
+
+    	  timetableData.forEach((row, i) => {
+    	    const tr = document.createElement("tr");
+
+    	    tr.innerHTML = `
+    	      <td>${row.time}</td>
+    	      <td contenteditable="true" oninput="updateTimetable(${i}, 'mon', this.innerText)">${row.mon || ''}</td>
+    	      <td contenteditable="true" oninput="updateTimetable(${i}, 'tue', this.innerText)">${row.tue || ''}</td>
+    	      <td contenteditable="true" oninput="updateTimetable(${i}, 'wed', this.innerText)">${row.wed || ''}</td>
+    	      <td contenteditable="true" oninput="updateTimetable(${i}, 'thu', this.innerText)">${row.thu || ''}</td>
+    	      <td contenteditable="true" oninput="updateTimetable(${i}, 'fri', this.innerText)">${row.fri || ''}</td>
+    	    `;
+
+    	    tbody.appendChild(tr);
+    	  });
+    	}
+
 
     function updateTimetable(index, day, value) {
       timetableData[index][day] = value;
     }
 
-    function getDayKey(korDay) {
-      return {
-        "월": "mon", "화": "tue", "수": "wed", "목": "thu", "금": "fri"
-      }[korDay];
-    }
+    function getDayKey(day) {
+    	  return {
+    	    "Mon": "mon", "Tue": "tue", "Wed": "wed", "Thu": "thu", "Fri": "fri"
+    	  }[day];
+    	}
 
     function loadTimetableFromServer() {
       const studentId = localStorage.getItem("username") || "guest";
@@ -170,6 +178,7 @@
     // 시작 시 로딩
     document.addEventListener("DOMContentLoaded", () => {
       initTimetable();
+      renderTimetable();
       loadTimetableFromServer();
     });
   </script>
