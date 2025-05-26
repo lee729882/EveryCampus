@@ -171,34 +171,55 @@
     	    const tr = document.createElement("tr");
 
     	    const timeCell = showSelect && row.time === ""
-    	    	  ? `<td class="time-cell">
-    	    	       <select onchange="updateTime(${i}, this.value)">
-    	    	         <option value="">시간 선택</option>
-    	    	         ${[
-    	    	           "08:00 - 08:30", "08:30 - 09:00", "09:00 - 09:30", "09:30 - 10:00",
-    	    	           "10:00 - 10:30", "10:30 - 11:00", "11:00 - 11:30", "11:30 - 12:00",
-    	    	           "12:00 - 12:30", "12:30 - 13:00", "13:00 - 13:30", "13:30 - 14:00",
-    	    	           "14:00 - 14:30", "14:30 - 15:00", "15:00 - 15:30", "15:30 - 16:00",
-    	    	           "16:00 - 16:30", "16:30 - 17:00", "17:00 - 17:30", "17:30 - 18:00"
-    	    	         ].map(t => `<option value="${t}">${t}</option>`).join("")}
-    	    	       </select>
-    	    	     </td>`
-    	    	  : `<td class="time-cell">
-    	    	       ${row.time}
-    	    	       <button class="delete-btn" onclick="removeRow(${i})">🗑️</button>
-    	    	     </td>`;
+    	      ? `<td class="time-cell">
+    	           <select onchange="updateTime(${i}, this.value)">
+    	             <option value="">시간 선택</option>
+    	             ${[
+    	               "08:00 - 08:30", "08:30 - 09:00", "09:00 - 09:30", "09:30 - 10:00",
+    	               "10:00 - 10:30", "10:30 - 11:00", "11:00 - 11:30", "11:30 - 12:00",
+    	               "12:00 - 12:30", "12:30 - 13:00", "13:00 - 13:30", "13:30 - 14:00",
+    	               "14:00 - 14:30", "14:30 - 15:00", "15:00 - 15:30", "15:30 - 16:00",
+    	               "16:00 - 16:30", "16:30 - 17:00", "17:00 - 17:30", "17:30 - 18:00"
+    	             ].map(t => `<option value="${t}">${t}</option>`).join("")}
+    	           </select>
+    	         </td>`
+    	      : `<td class="time-cell">
+    	           ${row.time}
+    	           <button class="delete-btn" onclick="removeRow(${i})">🗑️</button>
+    	         </td>`;
 
     	    tr.innerHTML = `
     	      ${timeCell}
-    	      <td contenteditable="true" oninput="updateTimetable(${i}, 'mon', this.innerText)">${row.mon}</td>
-    	      <td contenteditable="true" oninput="updateTimetable(${i}, 'tue', this.innerText)">${row.tue}</td>
-    	      <td contenteditable="true" oninput="updateTimetable(${i}, 'wed', this.innerText)">${row.wed}</td>
-    	      <td contenteditable="true" oninput="updateTimetable(${i}, 'thu', this.innerText)">${row.thu}</td>
-    	      <td contenteditable="true" oninput="updateTimetable(${i}, 'fri', this.innerText)">${row.fri}</td>
+    	      <td class="clickable" contenteditable="true"
+    	          onclick="goToReview(this.innerText)"
+    	          oninput="updateTimetable(${i}, 'mon', this.innerText)">
+    	          ${row.mon}
+    	      </td>
+    	      <td class="clickable" contenteditable="true"
+    	          onclick="goToReview(this.innerText)"
+    	          oninput="updateTimetable(${i}, 'tue', this.innerText)">
+    	          ${row.tue}
+    	      </td>
+    	      <td class="clickable" contenteditable="true"
+    	          onclick="goToReview(this.innerText)"
+    	          oninput="updateTimetable(${i}, 'wed', this.innerText)">
+    	          ${row.wed}
+    	      </td>
+    	      <td class="clickable" contenteditable="true"
+    	          onclick="goToReview(this.innerText)"
+    	          oninput="updateTimetable(${i}, 'thu', this.innerText)">
+    	          ${row.thu}
+    	      </td>
+    	      <td class="clickable" contenteditable="true"
+    	          onclick="goToReview(this.innerText)"
+    	          oninput="updateTimetable(${i}, 'fri', this.innerText)">
+    	          ${row.fri}
+    	      </td>
     	    `;
     	    tbody.appendChild(tr);
     	  });
     	}
+
 
 
 
