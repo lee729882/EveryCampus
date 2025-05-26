@@ -140,21 +140,30 @@
     	}
 
     function loadTimetableFromServer() {
-      const studentId = localStorage.getItem("username") || "guest";
-      fetch(`/api/timetable/load/${studentId}`)
-        .then(res => res.json())
-        .then(data => {
-          initTimetable(); // 기본 시간표 구조 초기화
-          data.forEach(entry => {
-            const row = timetableData.find(r => r.time === entry.timeSlot);
-            const key = getDayKey(entry.dayOfWeek);
-            if (row && key) {
-              row[key] = entry.subject ? entry.subject : ""; // null을 빈 문자열로 처리
-            }
-          });
-          renderTimetable();
-        });
-    }
+    	  const studentId = localStorage.getItem("username") || "guest";
+    	  fetch(`/api/timetable/load/${studentId}`)
+    	    .then(res => {
+    	      if (!res.ok) {
+    	        throw new Error(`시간표를 불러올 수 없습니다. (status: ${res.status})`);
+    	      }
+    	      return res.json();
+    	    })
+    	    .then(data => {
+    	      initTimetable();
+    	      data.forEach(entry => {
+    	        const row = timetableData.find(r => r.time === entry.timeSlot);
+    	        const key = getDayKey(entry.dayOfWeek);
+    	        if (row && key) {
+    	          row[key] = entry.subject || "";
+    	        }
+    	      });
+    	      renderTimetable();
+    	    })
+    	    .catch(err => {
+    	      alert(err.message);  // ❗ 사용자에게 오류 안내
+    	    });
+    	}
+
 
     function saveTimetableToServer() {
       const studentId = localStorage.getItem("username") || "guest";
