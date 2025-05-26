@@ -17,6 +17,8 @@ public class FreeBoard {
     private String title;
     private String content;
     private String writer;
+    private String imageUrl; // 이미지 파일 경로를 저장할 필드
+
 
     @Column(nullable = false)
     private String school;

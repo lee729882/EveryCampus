@@ -26,7 +26,7 @@ public class CommentController {
         Optional<FreeBoard> boardOpt = freeBoardRepository.findById(boardId);
         if (boardOpt.isEmpty()) return ResponseEntity.notFound().build();
 
-        comment.setPost(boardOpt.get()); // ✅ 엔티티 필드명 post로 연결
+        comment.setPost(boardOpt.get()); // 엔티티 필드명 post로 연결
         comment.setCreatedAt(LocalDateTime.now());
         return ResponseEntity.ok(commentRepository.save(comment));
     }
