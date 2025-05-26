@@ -65,6 +65,15 @@
     .home-button:hover {
       background-color: #218838;
     }
+	td.clickable {
+	  cursor: pointer;
+	  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+	}
+	
+	td.clickable:hover {
+	  background-color: #e8f0fe;
+	  box-shadow: inset 0 0 5px #4263eb;
+	}
 
   </style>
 </head>
@@ -116,17 +125,18 @@
     	    const tr = document.createElement("tr");
 
     	    tr.innerHTML = `
-    	      <td>${row.time}</td>
-    	      <td contenteditable="true" oninput="updateTimetable(${i}, 'mon', this.innerText)">${row.mon || ''}</td>
-    	      <td contenteditable="true" oninput="updateTimetable(${i}, 'tue', this.innerText)">${row.tue || ''}</td>
-    	      <td contenteditable="true" oninput="updateTimetable(${i}, 'wed', this.innerText)">${row.wed || ''}</td>
-    	      <td contenteditable="true" oninput="updateTimetable(${i}, 'thu', this.innerText)">${row.thu || ''}</td>
-    	      <td contenteditable="true" oninput="updateTimetable(${i}, 'fri', this.innerText)">${row.fri || ''}</td>
-    	    `;
+    	    	  <td>${row.time}</td>
+    	    	  <td contenteditable="true" class="clickable" onclick="goToReview('${row.mon}')" oninput="updateTimetable(${i}, 'mon', this.innerText)">${row.mon || ''}</td>
+    	    	  <td contenteditable="true" class="clickable" onclick="goToReview('${row.tue}')" oninput="updateTimetable(${i}, 'tue', this.innerText)">${row.tue || ''}</td>
+    	    	  <td contenteditable="true" class="clickable" onclick="goToReview('${row.wed}')" oninput="updateTimetable(${i}, 'wed', this.innerText)">${row.wed || ''}</td>
+    	    	  <td contenteditable="true" class="clickable" onclick="goToReview('${row.thu}')" oninput="updateTimetable(${i}, 'thu', this.innerText)">${row.thu || ''}</td>
+    	    	  <td contenteditable="true" class="clickable" onclick="goToReview('${row.fri}')" oninput="updateTimetable(${i}, 'fri', this.innerText)">${row.fri || ''}</td>
+    	    	`;
 
     	    tbody.appendChild(tr);
     	  });
     	}
+
 
 
     function updateTimetable(index, day, value) {
@@ -137,6 +147,13 @@
     	  return {
     	    "Mon": "mon", "Tue": "tue", "Wed": "wed", "Thu": "thu", "Fri": "fri"
     	  }[day];
+    	}
+    
+    function goToReview(subject) {
+    	  if (subject && subject.trim() !== "") {
+    	    const encoded = encodeURIComponent(subject.trim());
+    	    window.location.href = `/review/lecture?name=${encoded}`;
+    	  }
     	}
 
     function loadTimetableFromServer() {

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>전체 강의 리뷰</title>
+  <style>
+    body { font-family: 'Noto Sans KR', sans-serif; margin: 30px; background-color: #f2f2f2; }
+    h2 { color: #333; }
+    .review-box {
+      background: white;
+      border: 1px solid #ddd;
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    }
+    .review-box p { margin: 6px 0; }
+    .lecture-name {
+      font-weight: bold;
+      font-size: 1.1em;
+      color: #4263eb;
+    }
+    .home-button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .home-button:hover {
+      background-color: #218838;
+    }
+  </style>
+</head>
+<body>
+  <h2>전체 강의 리뷰 (최신순)</h2>
+
+  <div th:if="${reviews.size() > 0}" th:each="review : ${reviews}" class="review-box">
+    <p class="lecture-name" th:text="'강의명: ' + ${review.lectureName}">강의명</p>
+    <p><strong>작성자:</strong> <span th:text="${review.reviewer}">작성자</span></p>
+    <p><strong>평점:</strong> <span th:text="${review.rating}">4.5</span></p>
+    <p><strong>내용:</strong></p>
+    <p th:text="${review.content}">리뷰 내용</p>
+    <p><em th:text="${#temporals.format(review.createdAt, 'yyyy-MM-dd HH:mm')}">작성일</em></p>
+  </div>
+
+  <div th:if="${reviews.size() == 0}">
+    <p>등록된 리뷰가 없습니다.</p>
+  </div>
+
+<button class="home-button" onclick="location.href='/main.html'">홈으로 가기</button>
+</body>
+</html>

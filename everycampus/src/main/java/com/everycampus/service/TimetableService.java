@@ -10,15 +10,21 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+import com.everycampus.repository.LectureRepository; // 추가
+import com.everycampus.entity.Lecture; // 추가
+
+
 @Service
 public class TimetableService {
 
     private final TimetableRepository timetableRepository;
     private final UserRepository userRepository; // UserRepository 추가
+    private final LectureRepository lectureRepository;
 
-    public TimetableService(TimetableRepository timetableRepository, UserRepository userRepository) {
+    public TimetableService(TimetableRepository timetableRepository, UserRepository userRepository, LectureRepository lectureRepository) {
         this.timetableRepository = timetableRepository;
         this.userRepository = userRepository; // 생성자에서 UserRepository 주입
+        this.lectureRepository = lectureRepository;
     }
     
     public String getSubjectOrDefault(String subject) {
@@ -72,6 +78,10 @@ public class TimetableService {
         timetableList.removeIf(timetable -> timetable.getSubject() == null || timetable.getSubject().isEmpty());
         return timetableList;
     }
+    
+
+
+
     
 }
 

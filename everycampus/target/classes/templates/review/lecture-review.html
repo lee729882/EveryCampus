@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title th:text="'강의 리뷰 - ' + ${lectureName}">강의 리뷰</title>
+  <style>
+    body { font-family: 'Noto Sans KR', sans-serif; margin: 30px; background-color: #f9f9f9; }
+    h2 { color: #333; }
+    .review-box { border: 1px solid #ccc; background: #fff; padding: 15px; margin-bottom: 15px; border-radius: 8px; }
+    .review-box p { margin: 5px 0; }
+    form textarea, input[type="text"], input[type="number"] {
+      width: 100%; padding: 8px; margin-top: 5px; box-sizing: border-box;
+    }
+    form button {
+      margin-top: 10px;
+      padding: 10px 20px;
+      background-color: #4263eb;
+      border: none;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .back-button {
+      margin-top: 20px;
+      background-color: #28a745;
+    }
+    .home-button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .home-button:hover {
+      background-color: #218838;
+    }
+  </style>
+</head>
+<body>
+  <h2 th:text="'『' + ${lectureName} + '』 리뷰'">강의 리뷰</h2>
+
+  <!-- 리뷰 리스트 -->
+  <div th:if="${reviews.size() > 0}" th:each="review : ${reviews}" class="review-box">
+    <p><strong>작성자:</strong> <span th:text="${review.reviewer}">이름</span></p>
+    <p><strong>평점:</strong> <span th:text="${review.rating}">5.0</span></p>
+    <p><strong>내용:</strong></p>
+    <p th:text="${review.content}">리뷰 내용</p>
+    <p><em th:text="${#temporals.format(review.createdAt, 'yyyy-MM-dd HH:mm')}">작성일</em></p>
+  </div>
+  <div th:if="${reviews.size() == 0}">
+    <p>아직 리뷰가 없습니다.</p>
+  </div>
+
+  <!-- 리뷰 작성 폼 -->
+  <form th:action="@{/review/save}" method="post">
+    <input type="hidden" name="lectureName" th:value="${lectureName}" />
+    <label>작성자:</label>
+    <input type="text" name="reviewer" placeholder="닉네임" required />
+
+    <label>평점 (0~5):</label>
+    <input type="number" name="rating" step="0.5" min="0" max="5" required />
+
+    <label>리뷰 내용:</label>
+    <textarea name="content" rows="4" required></textarea>
+
+    <button type="submit">리뷰 작성</button>
+    
+    <button onclick="window.location.href='/review/all'">전체 강의 리뷰 보기</button>
+    
+  </form>
+
+<button class="home-button" onclick="location.href='/timetable.html'">← 시간표로 돌아가기</button>
+</body>
+</html>
