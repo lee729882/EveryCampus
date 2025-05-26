@@ -74,6 +74,28 @@
 	  background-color: #e8f0fe;
 	  box-shadow: inset 0 0 5px #4263eb;
 	}
+.time-cell {
+  position: relative;
+}
+
+.delete-btn {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: red;
+  color: white;
+  border: none;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+  display: none;
+}
+
+.time-cell:hover .delete-btn {
+  display: inline-block;
+}
 
   </style>
 </head>
@@ -101,6 +123,7 @@
   <div class="button-container">
     <button onclick="loadTimetableFromServer()">시간표 불러오기</button>
     <button onclick="saveTimetableToServer()">시간표 저장</button>
+      <button onclick="addCustomRow()">30분 단위 행 추가</button>
     <button class="home-button" onclick="goHome()">홈 화면</button>
   </div>
 
@@ -108,31 +131,71 @@
     let timetableData = [];
 
     function initTimetable() {
-      timetableData = [];
-      for (let hour = 9; hour <= 17; hour++) {
-        timetableData.push({
-          time: `${hour.toString().padStart(2, "0")}:00 - ${(hour + 1).toString().padStart(2, "0")}:00`,
-          mon: "", tue: "", wed: "", thu: "", fri: ""
-        });
-      }
-    }
+    	  timetableData = [];
+    	  for (let hour = 9; hour <= 17; hour++) {
+    	    timetableData.push({
+    	      time: `${hour.toString().padStart(2, "0")}:00 - ${(hour + 1).toString().padStart(2, "0")}:00`,
+    	      mon: "", tue: "", wed: "", thu: "", fri: ""
+    	    });
+    	  }
+    	}
 
-    function renderTimetable() {
+    function addCustomRow() {
+    	  const timeOptions = [
+    	    "08:00 - 08:30", "08:30 - 09:00",
+    	    "09:00 - 09:30", "09:30 - 10:00",
+    	    "10:00 - 10:30", "10:30 - 11:00",
+    	    "11:00 - 11:30", "11:30 - 12:00",
+    	    "12:00 - 12:30", "12:30 - 13:00",
+    	    "13:00 - 13:30", "13:30 - 14:00",
+    	    "14:00 - 14:30", "14:30 - 15:00",
+    	    "15:00 - 15:30", "15:30 - 16:00",
+    	    "16:00 - 16:30", "16:30 - 17:00"
+    	  ];
+
+    	  const newRow = {
+    	    time: "",  // 나중에 select에서 선택
+    	    mon: "", tue: "", wed: "", thu: "", fri: ""
+    	  };
+
+    	  timetableData.push(newRow);
+    	  renderTimetable(true); // 커스텀 행 표시
+    	}
+
+
+    function renderTimetable(showSelect = false) {
     	  const tbody = document.querySelector("#timetable-table tbody");
     	  tbody.innerHTML = "";
 
     	  timetableData.forEach((row, i) => {
     	    const tr = document.createElement("tr");
 
-    	    tr.innerHTML = `
-    	    	  <td>${row.time}</td>
-    	    	  <td contenteditable="true" class="clickable" onclick="goToReview('${row.mon}')" oninput="updateTimetable(${i}, 'mon', this.innerText)">${row.mon || ''}</td>
-    	    	  <td contenteditable="true" class="clickable" onclick="goToReview('${row.tue}')" oninput="updateTimetable(${i}, 'tue', this.innerText)">${row.tue || ''}</td>
-    	    	  <td contenteditable="true" class="clickable" onclick="goToReview('${row.wed}')" oninput="updateTimetable(${i}, 'wed', this.innerText)">${row.wed || ''}</td>
-    	    	  <td contenteditable="true" class="clickable" onclick="goToReview('${row.thu}')" oninput="updateTimetable(${i}, 'thu', this.innerText)">${row.thu || ''}</td>
-    	    	  <td contenteditable="true" class="clickable" onclick="goToReview('${row.fri}')" oninput="updateTimetable(${i}, 'fri', this.innerText)">${row.fri || ''}</td>
-    	    	`;
+    	    const timeCell = showSelect && row.time === ""
+    	    	  ? `<td class="time-cell">
+    	    	       <select onchange="updateTime(${i}, this.value)">
+    	    	         <option value="">시간 선택</option>
+    	    	         ${[
+    	    	           "08:00 - 08:30", "08:30 - 09:00", "09:00 - 09:30", "09:30 - 10:00",
+    	    	           "10:00 - 10:30", "10:30 - 11:00", "11:00 - 11:30", "11:30 - 12:00",
+    	    	           "12:00 - 12:30", "12:30 - 13:00", "13:00 - 13:30", "13:30 - 14:00",
+    	    	           "14:00 - 14:30", "14:30 - 15:00", "15:00 - 15:30", "15:30 - 16:00",
+    	    	           "16:00 - 16:30", "16:30 - 17:00", "17:00 - 17:30", "17:30 - 18:00"
+    	    	         ].map(t => `<option value="${t}">${t}</option>`).join("")}
+    	    	       </select>
+    	    	     </td>`
+    	    	  : `<td class="time-cell">
+    	    	       ${row.time}
+    	    	       <button class="delete-btn" onclick="removeRow(${i})">🗑️</button>
+    	    	     </td>`;
 
+    	    tr.innerHTML = `
+    	      ${timeCell}
+    	      <td contenteditable="true" oninput="updateTimetable(${i}, 'mon', this.innerText)">${row.mon}</td>
+    	      <td contenteditable="true" oninput="updateTimetable(${i}, 'tue', this.innerText)">${row.tue}</td>
+    	      <td contenteditable="true" oninput="updateTimetable(${i}, 'wed', this.innerText)">${row.wed}</td>
+    	      <td contenteditable="true" oninput="updateTimetable(${i}, 'thu', this.innerText)">${row.thu}</td>
+    	      <td contenteditable="true" oninput="updateTimetable(${i}, 'fri', this.innerText)">${row.fri}</td>
+    	    `;
     	    tbody.appendChild(tr);
     	  });
     	}
@@ -179,6 +242,24 @@
     	    .catch(err => {
     	      alert(err.message);  // ❗ 사용자에게 오류 안내
     	    });
+    	}
+	    function updateTime(index, value) {
+	    	  timetableData[index].time = value;
+	    	  sortTimetable();
+	    	  renderTimetable(true);
+	    	}
+	
+	    function removeRow(index) {
+	    	  timetableData.splice(index, 1);
+	    	  renderTimetable(true);
+	    	}
+
+
+    	function sortTimetable() {
+    	  timetableData.sort((a, b) => {
+    	    if (!a.time || !b.time) return 0;
+    	    return a.time.localeCompare(b.time);
+    	  });
     	}
 
 
