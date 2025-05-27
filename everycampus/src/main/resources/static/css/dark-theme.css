@@ -1,0 +1,300 @@
+/* 전체 배경 및 텍스트 */
+body.dark-mode {
+  background-color: #1e1e1e;
+  color: #f1f1f1;
+}
+
+/* 컨테이너 및 박스 배경 */
+body.dark-mode .container,
+body.dark-mode .menu-list,
+body.dark-mode .modal-content,
+body.dark-mode .setting-group {
+  background-color: #2c2c2c;
+  color: #ffffff;
+}
+
+/* 입력창/드롭다운 */
+body.dark-mode input,
+body.dark-mode select {
+  background-color: #333;
+  color: #fff;
+  border: 1px solid #555;
+}
+
+/* 버튼 */
+body.dark-mode button {
+  background-color: #5c7cfa;
+  color: white;
+}
+body.dark-mode button:hover {
+  background-color: #364fc7;
+}
+
+/* 하단 내비게이션 */
+body.dark-mode .bottom-nav {
+  background-color: #2c2c2c;
+  border-top: 1px solid #444;
+}
+body.dark-mode .nav-item {
+  color: #bbb;
+}
+body.dark-mode .nav-item.active,
+body.dark-mode .nav-item:hover {
+  color: #5c7cfa;
+}
+
+/* 상단 바 */
+body.dark-mode .top-nav {
+  background-color: #2c2c2c;
+  box-shadow: 0 2px 10px rgba(255, 255, 255, 0.1);
+}
+body.dark-mode .top-nav .logo {
+  color: #5c7cfa;
+}
+
+/* 인사 메시지 */
+body.dark-mode #greeting {
+  background-color: #2a2a2a;
+  color: #f1f1f1;
+  box-shadow: 0 2px 6px rgba(255, 255, 255, 0.05);
+}
+
+/* empty-state 박스 */
+body.dark-mode .empty-state {
+  background-color: #2a2a2a;
+  color: #ccc;
+}
+
+body.dark-mode .empty-state h3 {
+  color: #f1f1f1;
+}
+
+body.dark-mode .empty-state p {
+  color: #aaa;
+}
+/* 모달 배경 다크 */
+body.dark-mode .modal {
+  background-color: #2c2c2c;
+  color: #f1f1f1;
+  box-shadow: 0 10px 25px rgba(255, 255, 255, 0.1);
+}
+
+/* 입력창 스타일 */
+body.dark-mode input,
+body.dark-mode textarea,
+body.dark-mode input[type="file"] {
+  background-color: #3a3a3a;
+  color: #fff;
+  border: 1px solid #666;
+}
+
+body.dark-mode input::placeholder,
+body.dark-mode textarea::placeholder {
+  color: #aaa;
+}
+
+/* 파일 선택 버튼 텍스트 컬러도 맞추기 (브라우저 기본 스타일 일부 무시됨에 유의) */
+body.dark-mode input[type="file"]::-webkit-file-upload-button {
+  background: #444;
+  color: #fff;
+  border: none;
+  padding: 0.5em 1em;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* 모달 내 닫기 버튼 hover */
+body.dark-mode .modal-close {
+  color: #ccc;
+}
+
+body.dark-mode .modal-close:hover {
+  color: #fff;
+  background-color: #444;
+}
+/* 게시글 카드 배경 */
+body.dark-mode .post {
+  background-color: #2c2c2c;
+  color: #f1f1f1;
+  box-shadow: 0 2px 8px rgba(255, 255, 255, 0.05);
+}
+
+/* 카드 내부 영역 */
+body.dark-mode .post-header {
+  border-bottom: 1px solid #444;
+}
+
+body.dark-mode .post-content-container {
+  background-color: inherit;
+}
+
+body.dark-mode .post-title {
+  color: #ffffff;
+}
+
+body.dark-mode .post-content {
+  color: #cccccc;
+}
+
+/* 글쓴이 정보 */
+body.dark-mode .post-meta,
+body.dark-mode .post-username span {
+  color: #999;
+}
+
+/* 댓글영역 배경 */
+body.dark-mode .comment-section {
+  background-color: #222;
+  border-top: 1px solid #444;
+}
+
+/* 댓글 */
+body.dark-mode .comment {
+  background-color: #333;
+  color: #f1f1f1;
+}
+
+/* 댓글 입력창 */
+body.dark-mode .comment-input-container input {
+  background-color: #3a3a3a;
+  color: #fff;
+  border: 1px solid #666;
+}
+
+body.dark-mode .comment-input-container input::placeholder {
+  color: #aaa;
+}
+/* 게시글 하단 버튼 영역 배경 */
+body.dark-mode .post-actions {
+  background-color: #1e1e1e;
+  border-top: 1px solid #444;
+}
+
+/* 액션 버튼 색상 (기본은 유지하되 어두운 배경과 조화되도록) */
+body.dark-mode .post-action-btn,
+body.dark-mode .delete-btn {
+  background-color: #3b3b3b;
+  color: #ddd;
+}
+
+body.dark-mode .post-action-btn:hover,
+body.dark-mode .delete-btn:hover {
+  background-color: #4b4b4b;
+  color: #fff;
+}
+
+/* 좋아요 버튼이 liked 상태일 때도 어두운 배경과 어울리게 */
+body.dark-mode .like-btn.liked {
+  background-color: rgba(255, 0, 0, 0.2);
+  color: #ff6b6b;
+}
+
+body.dark-mode {
+  background-color: #1e1e1e;
+  color: #f1f1f1;
+}
+
+/* 리뷰 카드 박스 */
+body.dark-mode .review-box {
+  background-color: #2a2a2a;
+  border: 1px solid #444;
+  color: #f1f1f1;
+}
+
+/* 제목 색상 */
+body.dark-mode .lecture-name {
+  color: #66aaff;
+}
+
+/* 강조 텍스트 (작성자, 평점 등) */
+body.dark-mode .review-box strong {
+  color: #dddddd;
+}
+
+/* 날짜 강조 텍스트 */
+body.dark-mode .review-box em {
+  color: #bbbbbb;
+  font-style: italic;
+}
+
+/* 버튼 */
+body.dark-mode .home-button {
+  background-color: #28a745;
+  color: white;
+}
+
+body.dark-mode .home-button:hover {
+  background-color: #218838;
+}
+/* 다크 모드: 전체 배경 및 글자색 */
+body.dark-mode {
+  background-color: #1e1e1e;
+  color: #f1f1f1;
+}
+
+/* 테이블 카드 배경 */
+body.dark-mode .timetable-container {
+  background-color: #2a2a2a;
+  color: #f1f1f1;
+}
+
+/* 테이블 셀 */
+body.dark-mode table {
+  background-color: #2a2a2a;
+  color: #f1f1f1;
+}
+
+/* 테이블 테두리 */
+body.dark-mode th, body.dark-mode td {
+  border: 1px solid #444;
+}
+
+/* 테이블 머리 */
+body.dark-mode th {
+  background-color: #007bff;
+  color: white;
+}
+
+/* 셀 클릭 가능 영역 */
+body.dark-mode td.clickable {
+  background-color: #333;
+}
+
+body.dark-mode td.clickable:hover {
+  background-color: #3a3a3a;
+  box-shadow: inset 0 0 5px #66aaff;
+}
+
+/* 셀 편집 가능 */
+body.dark-mode td[contenteditable="true"] {
+  background-color: #2c2c2c;
+}
+
+/* 삭제 버튼 */
+body.dark-mode .delete-btn {
+  background-color: #f03e3e;
+  color: white;
+}
+
+body.dark-mode .delete-btn:hover {
+  background-color: #c92a2a;
+}
+
+/* 버튼 */
+body.dark-mode button {
+  background-color: #5c7cfa;
+  color: white;
+}
+
+body.dark-mode button:hover {
+  background-color: #364fc7;
+}
+
+/* 홈 버튼 - 초록색 계열 유지 */
+body.dark-mode .home-button {
+  background-color: #28a745;
+}
+
+body.dark-mode .home-button:hover {
+  background-color: #218838;
+}
