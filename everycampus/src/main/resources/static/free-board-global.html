@@ -558,6 +558,7 @@
       <h3>새 글 작성</h3>
       <input type="text" id="title" placeholder="제목" />
       <textarea id="content" rows="5" placeholder="내용"></textarea>
+      <input type="file" id="image" accept="image/*">
       <button onclick="submitPost()">작성</button>
     </div>
   </div>
@@ -780,6 +781,7 @@
                 <div class="post-content-container">
                   <div class="post-title">${p.title}</div>
                   <div class="post-content">${p.content}</div>
+                  ${p.imageUrl ? `<img src="${p.imageUrl}" alt="첨부 이미지" style="max-width: 100%; margin-top: 10px;" />` : ''}
                 </div>
                 <div class="post-actions">
                   <button class="post-action-btn like-btn ${isLiked ? 'liked' : ''}" onclick="toggleLike(${p.id})">
@@ -881,43 +883,54 @@
       toggleWriteForm();
     }
 
+    
+    //이미지 업로드 기능 
     async function submitPost() {
-      const title = document.getElementById("title").value.trim();
-      const content = document.getElementById("content").value.trim();
-      if (!title || !content) return alert("제목과 내용을 모두 입력해주세요.");
+	  const title = document.getElementById("title").value.trim();
+	  const content = document.getElementById("content").value.trim();
+	  const imageFile = document.getElementById("image").files[0];
+	
+	  if (!title || !content) {
+	    alert("제목과 내용을 모두 입력해주세요.");
+	    return;
+	  }
+	
+	  const formData = new FormData();
+	  formData.append("title", title);
+	  formData.append("content", content);
+	  formData.append("writer", username);
+	  formData.append("school", school);
+	  formData.append("category", currentCategory);
+	  if (imageFile) {
+	    formData.append("image", imageFile);
+	  }
+	
+	  try {
+	    if (editingPostId) {
+	      await fetch(`/api/board/${editingPostId}?username=${encodeURIComponent(username)}`, {
+	        method: 'PUT',
+	        body: formData  // formData 사용
+	      });
+	      editingPostId = null;
+	    } else {
+	      await fetch('/api/board', {
+	        method: 'POST',
+	        body: formData
+	      });
+	    }
+	
+	    document.getElementById("title").value = '';
+	    document.getElementById("content").value = '';
+	    document.getElementById("image").value = '';
+	    toggleWriteForm();
+	    loadPosts();
+	  } catch (error) {
+	    console.error("게시글 작성/수정 실패:", error);
+	    alert("게시글 작성/수정에 실패했습니다.");
+	  }
+	}
+	
 
-      const post = { title, content, writer: username, school, category: currentCategory };
-
-      try {
-        let res;
-        if (editingPostId) {
-          res = await fetch(`/api/board/${editingPostId}?username=${encodeURIComponent(username)}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(post)
-          });
-          editingPostId = null;
-        } else {
-          res = await fetch('/api/board', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(post)
-          });
-        }
-
-        if (res.ok) {
-          document.getElementById("title").value = '';
-          document.getElementById("content").value = '';
-          toggleWriteForm();
-          loadPosts();
-        } else {
-          alert("작성 또는 수정에 실패했습니다.");
-        }
-      } catch (err) {
-        console.error(err);
-        alert("요청 중 오류가 발생했습니다.");
-      }
-    }
 
     async function deletePost(id) {
       if (!confirm("정말 삭제하시겠습니까?")) return;
