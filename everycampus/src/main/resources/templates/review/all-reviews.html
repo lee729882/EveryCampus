@@ -4,34 +4,64 @@
   <meta charset="UTF-8">
   <title>전체 강의 리뷰</title>
   <style>
-    body { font-family: 'Noto Sans KR', sans-serif; margin: 30px; background-color: #f2f2f2; }
-    h2 { color: #333; }
-    .review-box {
-      background: white;
-      border: 1px solid #ddd;
-      padding: 15px;
-      margin-bottom: 15px;
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-    }
-    .review-box p { margin: 6px 0; }
-    .lecture-name {
-      font-weight: bold;
-      font-size: 1.1em;
-      color: #4263eb;
-    }
-    .home-button {
-      margin-top: 20px;
-      padding: 10px 20px;
-      background-color: #28a745;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-    .home-button:hover {
-      background-color: #218838;
-    }
+:root {
+  --primary: #007bff;
+  --primary-hover: #0056b3;
+  --success: #28a745;
+  --success-hover: #218838;
+  --text: #333;
+  --border: #dee2e6;
+  --background: #f8f9fa;
+  --card: #ffffff;
+}
+
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background-color: var(--background);
+  color: var(--text);
+  padding: 30px;
+}
+
+h2 {
+  font-size: 1.8rem;
+  color: var(--primary);
+  border-bottom: 2px solid var(--primary);
+  padding-bottom: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.review-box {
+  background: var(--card);
+  border: 1px solid var(--border);
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.lecture-name {
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: var(--primary);
+}
+
+button.home-button {
+  margin-top: 30px;
+  padding: 10px 20px;
+  background-color: var(--success);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+button.home-button:hover {
+  background-color: var(--success-hover);
+}
+
   </style>
 </head>
 <body>
