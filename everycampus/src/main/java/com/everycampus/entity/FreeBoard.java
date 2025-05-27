@@ -5,7 +5,7 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.*;
-
+@Builder // 이 줄이 꼭 필요함
 @Entity
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
 public class FreeBoard {
@@ -17,6 +17,8 @@ public class FreeBoard {
     private String title;
     private String content;
     private String writer;
+    
+    @Column(nullable = true)
     private String imageUrl; // 이미지 파일 경로를 저장할 필드
 
 

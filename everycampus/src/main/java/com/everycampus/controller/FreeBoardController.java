@@ -7,15 +7,24 @@ import com.everycampus.repository.BoardLikeRepository;
 import com.everycampus.repository.FreeBoardRepository;
 import com.everycampus.repository.UserRepository;
 
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.util.*;
 
 @RestController
+@Builder // 이 줄이 꼭 필요함
 @RequestMapping("/api/board")
 @RequiredArgsConstructor
 public class FreeBoardController {
@@ -38,25 +47,59 @@ public class FreeBoardController {
     }
 
     // 게시글 작성
-    @PostMapping
-    public ResponseEntity<FreeBoard> create(@RequestBody FreeBoard board) {
-        Optional<User> optionalUser = userRepository.findByUsername(board.getWriter());
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<FreeBoard> create(
+            @RequestParam("title") String title,
+            @RequestParam("content") String content,
+            @RequestParam("writer") String writer,
+            @RequestParam("school") String school,
+            @RequestParam("category") String category,
+            @RequestPart(value = "image", required = false) MultipartFile image) {
+
+        Optional<User> optionalUser = userRepository.findByUsername(writer);
         if (optionalUser.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
 
-        board.setSchool(optionalUser.get().getSchool());
-        board.setCreatedAt(LocalDateTime.now());
-        board.setLikeCount(0);  // 기본값 설정
-        FreeBoard saved = freeBoardRepository.save(board);
-        return ResponseEntity.ok(saved);
+        String imageUrl = null;
+        if (image != null && !image.isEmpty()) {
+            try {
+                String filename = UUID.randomUUID() + "_" + image.getOriginalFilename();
+                Path path = Paths.get("uploads", filename);
+                Files.createDirectories(path.getParent());
+                Files.write(path, image.getBytes());
+                imageUrl = "/uploads/" + filename;
+            } catch (IOException e) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            }
+        }
+
+        FreeBoard post = FreeBoard.builder()
+                .title(title)
+                .content(content)
+                .writer(writer)
+                .school(school)
+                .category(category)
+                .createdAt(LocalDateTime.now())
+                .likeCount(0)
+                .imageUrl(imageUrl)
+                .build();
+
+        return ResponseEntity.ok(freeBoardRepository.save(post));
     }
 
+
     // 게시글 수정
-    @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable("id") Long id,
-                                    @RequestParam("username") String username,
-                                    @RequestBody FreeBoard updatedPost) {
+    @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> updatePost(
+            @PathVariable("id") Long id,
+            @RequestParam("username") String username,
+            @RequestParam("title") String title,
+            @RequestParam("content") String content,
+            @RequestParam("school") String school,
+            @RequestParam("category") String category,
+            @RequestPart(value = "image", required = false) MultipartFile imageFile
+    ) {
         Optional<FreeBoard> optional = freeBoardRepository.findById(id);
         if (optional.isEmpty()) return ResponseEntity.notFound().build();
 
@@ -65,11 +108,26 @@ public class FreeBoardController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("수정 권한이 없습니다.");
         }
 
-        post.setTitle(updatedPost.getTitle());
-        post.setContent(updatedPost.getContent());
+        post.setTitle(title);
+        post.setContent(content);
+        post.setSchool(school);
+        post.setCategory(category);
+
+        if (imageFile != null && !imageFile.isEmpty()) {
+            try {
+                String filename = UUID.randomUUID() + "_" + imageFile.getOriginalFilename();
+                Path path = Paths.get("uploads", filename);
+                Files.copy(imageFile.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+                post.setImageUrl("/uploads/" + filename); // 이미지 URL 업데이트
+            } catch (IOException e) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("이미지 저장 실패");
+            }
+        }
+
         freeBoardRepository.save(post);
         return ResponseEntity.ok(post);
     }
+
 
     // 게시글 삭제
     @DeleteMapping("/{id}")
