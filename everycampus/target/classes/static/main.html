@@ -486,14 +486,8 @@
   </style>
 </head>
 <body>
-
-  <script>
-    const school = localStorage.getItem("school") || "";
-    if (school.trim() !== "목포대학교") {
-      alert("이 페이지는 목포대학교 사용자만 접근할 수 있습니다.");
-      window.location.href = "/login.html";
-    }
-  </script>
+<script src="/js/school-guard.js"></script>
+<script>guardSchool("목포대학교");</script>
   
   <!-- 상단 네비게이션 -->
   <div class="top-nav">
@@ -646,12 +640,13 @@
 
 </script>
 <script>
-	function logout() {
-	  // 실제 로그아웃 처리 로직
-	  // 예: 세션 삭제 + 로그인 페이지로 이동
+function logout() {
+	  localStorage.removeItem("username");
+	  localStorage.removeItem("school");
 	  alert("로그아웃되었습니다.");
-	  window.location.href = "/login.html"; // 또는 백엔드 로그아웃 경로
+	  window.location.href = "/login.html";
 	}
+
 </script>
 <script src="/js/theme.js"></script>
 </body>

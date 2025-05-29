@@ -127,6 +127,7 @@
       localStorage.setItem("username", result.username);
       localStorage.setItem("school", result.school);  // 선택적으로 저장
 
+
       const school = result.school.trim();
       // ✅ 학교별로 페이지 분기
       switch (result.school) {
@@ -134,10 +135,10 @@
           location.href = "/main.html";
           break;
         case "전남대학교":
-          location.href = "/main_JNU.html";
+          location.href = "/main-JNU.html";
           break;
         case "순천대학교":
-          location.href = "/main_SCNU.html";
+          location.href = "/main-SCNU.html";
           break;
         default:
           alert("등록되지 않은 학교입니다.");
