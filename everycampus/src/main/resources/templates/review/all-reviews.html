@@ -84,21 +84,19 @@ button.home-button:hover {
 <button class="home-button" onclick="goHome()">홈으로 가기</button>
 
 <script>
-  function goHome() {
-    const school = localStorage.getItem("school") || "";
-    const normalized = normalizeSchoolName(school);
-    window.location.href = `/main-${normalized}.html`;
-  }
+function getMainUrl(school) {
+	  const map = {
+	    "목포대학교": "/main.html",
+	    "순천대학교": "/main-SCNU.html",
+	    "전남대학교": "/main-JNU.html"
+	  };
+	  return map[school] || "/main-default.html";
+	}
 
-  function normalizeSchoolName(school) {
-    const map = {
-      "목포대학교": "mokpo",
-      "전남대학교": "JNU",
-      "순천대학교": "SCNU"
-      // 필요한 학교 계속 추가
-    };
-    return map[school] || "default";  // 등록 안된 학교 → /main-default.html
-  }
+	function goHome() {
+	  const school = localStorage.getItem("school") || "";
+	  window.location.href = getMainUrl(school);
+	}
 </script>
 <script src="/js/theme.js"></script>
 </body>
