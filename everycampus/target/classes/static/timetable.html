@@ -295,21 +295,18 @@
       });
     }
 
-    function goHome() {
-    	  const school = localStorage.getItem("school") || "";
-    	  const normalized = normalizeSchoolName(school);
-    	  window.location.href = `/main-${normalized}.html`;
+    function getMainUrl(school) {
+    	  const map = {
+    	    "목포대학교": "/main.html",
+    	    "순천대학교": "/main-SCNU.html",
+    	    "전남대학교": "/main-JNU.html"
+    	  };
+    	  return map[school] || "/main-default.html";
     	}
 
-    	function normalizeSchoolName(school) {
-    	  // 한글 학교명을 영어 URL-friendly 형태로 변환
-    	  const map = {
-    	    "목포대학교": "main",
-    	    "순천대학교": "SCNU",
-    	    "전남대학교": "JNU",
-    	    // 필요한 만큼 추가
-    	  };
-    	  return map[school] || "default";  // 매핑 안되면 /main-default.html
+    	function goHome() {
+    	  const school = localStorage.getItem("school") || "";
+    	  window.location.href = getMainUrl(school);
     	}
 
 
