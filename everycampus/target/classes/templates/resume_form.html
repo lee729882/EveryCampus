@@ -1,0 +1,119 @@
+<!-- resume_form.html -->
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>내 이력서 작성</title>
+  <style>
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background: #fff;
+      padding: 40px;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      font-size: 28px;
+      margin-bottom: 30px;
+    }
+
+    .section {
+      margin-bottom: 40px;
+    }
+
+    .section-title {
+      font-weight: bold;
+      font-size: 18px;
+      border-bottom: 2px solid #555;
+      padding-bottom: 5px;
+      margin-bottom: 20px;
+    }
+
+    .field {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .field span.label {
+      width: 100px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .field input {
+      flex: 1;
+      border: 1px solid #ccc;
+      padding: 6px;
+      border-radius: 6px;
+    }
+
+    .submit-btn {
+      display: block;
+      width: 100%;
+      padding: 14px;
+      background-color: #4263eb;
+      color: white;
+      font-size: 1rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+
+    .submit-btn:hover {
+      background-color: #364fc7;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>내 이력서</h1>
+
+    <form th:action="@{/resume}" th:object="${resume}" method="post">
+      <div class="section">
+        <div class="section-title">인적사항</div>
+        <div class="field"><span class="label">성명</span><input type="text" th:field="*{name}" /></div>
+        <div class="field"><span class="label">연락처</span><input type="text" th:field="*{phone}" /></div>
+        <div class="field"><span class="label">이메일</span><input type="email" th:field="*{email}" /></div>
+        <div class="field"><span class="label">주소</span><input type="text" th:field="*{address}" /></div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">학력사항</div>
+        <div class="field"><span class="label">학교 1</span><input type="text" th:field="*{school1}" /></div>
+        <div class="field"><span class="label">전공 1</span><input type="text" th:field="*{major1}" /></div>
+        <div class="field"><span class="label">학교 2</span><input type="text" th:field="*{school2}" /></div>
+        <div class="field"><span class="label">전공 2</span><input type="text" th:field="*{major2}" /></div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">경력사항</div>
+        <div class="field"><span class="label">회사 1</span><input type="text" th:field="*{company1}" /></div>
+        <div class="field"><span class="label">직무 1</span><input type="text" th:field="*{role1}" /></div>
+        <div class="field"><span class="label">회사 2</span><input type="text" th:field="*{company2}" /></div>
+        <div class="field"><span class="label">직무 2</span><input type="text" th:field="*{role2}" /></div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">기타사항</div>
+        <div class="field"><span class="label">어학</span><input type="text" th:field="*{language}" /></div>
+        <div class="field"><span class="label">자격증</span><input type="text" th:field="*{certificate}" /></div>
+      </div>
+
+      <!-- ✅ 작성하기 버튼 -->
+      <button type="submit" class="submit-btn">작성하기</button>
+    </form>
+  </div>
+</body>
+</html>

@@ -3,6 +3,7 @@ package com.everycampus.repository;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+
 import com.everycampus.entity.FreeBoard;
 
 public interface FreeBoardRepository extends JpaRepository<FreeBoard, Long> {
@@ -12,4 +13,7 @@ public interface FreeBoardRepository extends JpaRepository<FreeBoard, Long> {
 
     // 전체 학교 + 특정 게시판용 (예: 통합 자유게시판)
     List<FreeBoard> findByCategoryOrderByCreatedAtDesc(String category);
+
+    // ✅ 사용자 작성 게시글 보기용
+    List<FreeBoard> findByWriterOrderByCreatedAtDesc(String writer);
 }

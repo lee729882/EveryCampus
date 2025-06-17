@@ -1,0 +1,49 @@
+<!-- templates/survey/survey_result.html -->
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>설문 결과</title>
+  <style>
+    body { font-family: 'Noto Sans KR', sans-serif; background: #f9f9f9; padding: 40px; }
+    .container { max-width: 700px; margin: auto; background: #fff; border-radius: 12px; padding: 30px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);}
+    h2 { color: #4263eb; margin-bottom: 24px;}
+    .question-block { margin-bottom: 32px;}
+    .label { font-weight: bold;}
+    .stat-bar-bg { background: #e3e7fc; border-radius: 8px; height: 18px; margin-top: 6px; width: 80%; }
+    .stat-bar-fill { background: #4263eb; height: 100%; border-radius: 8px;}
+    .answer-list { margin-left: 12px; color: #444;}
+  </style>
+</head>
+<body>
+<div class="container">
+  <h2 th:text="${survey.title}">설문 결과</h2>
+  <div th:each="question : ${survey.questions}" class="question-block">
+    <div class="label" th:text="${question.questionText}"></div>
+    <div th:switch="${question.type}">
+      <!-- 객관식: 통계 -->
+      <div th:case="'객관식'">
+        <div th:each="stat : ${stats[question.id]}">
+          <div style="margin-top:8px;">
+            <span th:text="${stat.choice}"></span>
+            <span th:text="| (${stat.count}명)|"></span>
+            <div class="stat-bar-bg">
+              <div class="stat-bar-fill" th:style="'width: ' + ${stat.percent} + '%;'"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- 주관식: 전체 응답 나열 -->
+      <div th:case="'주관식'">
+        <div class="answer-list">
+          <div th:each="ans : ${stats[question.id]}">
+            <span th:text="${ans}"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <a href="/survey" style="color:#4263eb;font-weight:bold;">← 설문 목록으로</a>
+</div>
+</body>
+</html>

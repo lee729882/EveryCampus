@@ -1,0 +1,95 @@
+<!-- templates/survey_create.html -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>설문 만들기</title>
+  <style>
+    body { font-family: 'Noto Sans KR', sans-serif; background: #f9f9f9; padding: 40px; }
+    .container { max-width: 600px; margin: auto; background: #fff; border-radius: 12px; padding: 30px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);}
+    h2 { color: #4263eb; margin-bottom: 24px;}
+    label { font-weight: bold; margin-top: 12px; display: block; }
+    input, textarea, select { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; margin-top: 8px; }
+    .question-block { background: #f7f8fa; border-radius: 8px; padding: 16px; margin-bottom: 16px;}
+    .btn { background: #4263eb; color: #fff; padding: 12px 28px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; margin-top: 20px; }
+    .btn:hover { background: #364fc7; }
+    .choice-list { margin: 10px 0 0 0; padding: 0; }
+    .choice-list li { list-style: none; margin-bottom: 5px; display: flex; align-items: center;}
+    .choice-list input[type="text"] { width: 80%; margin-right: 10px;}
+    .choice-list button { background:#f03e3e; color:white; border:none; border-radius:4px; padding: 4px 10px; }
+    .add-choice-btn { background: #4263eb; color: #fff; border: none; border-radius: 4px; padding: 4px 10px; margin-top: 8px;}
+  </style>
+  <script>
+    function addQuestion() {
+      const idx = document.querySelectorAll('.question-block').length;
+      const questionBlock = document.createElement('div');
+      questionBlock.className = 'question-block';
+      questionBlock.innerHTML = `
+        <label>문항 내용</label>
+        <input type="text" name="questionTexts" required maxlength="100">
+        <label>문항 유형</label>
+        <select name="types" onchange="toggleChoices(this, ${idx})">
+          <option value="객관식">객관식</option>
+          <option value="주관식">주관식</option>
+        </select>
+        <div class="choices-area" id="choices-area-${idx}">
+          <label>객관식 보기</label>
+          <ul class="choice-list" id="choice-list-${idx}"></ul>
+          <button type="button" class="add-choice-btn" onclick="addChoice(${idx})">+ 보기 추가</button>
+        </div>
+        <button type="button" onclick="this.parentElement.remove()" style="background:#f03e3e;color:white;border:none;padding:4px 12px;border-radius:6px;margin-top:10px;">문항 삭제</button>
+      `;
+      document.getElementById('questions-area').appendChild(questionBlock);
+      addChoice(idx);
+      addChoice(idx);
+    }
+
+    function addChoice(qIdx) {
+      const list = document.getElementById('choice-list-' + qIdx);
+      const li = document.createElement('li');
+
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.name = 'choices' + qIdx;
+      input.placeholder = '보기 입력';
+      input.required = true;
+      input.maxLength = 100;
+
+      const delBtn = document.createElement('button');
+      delBtn.type = 'button';
+      delBtn.textContent = '삭제';
+      delBtn.style.background = '#f03e3e';
+      delBtn.style.color = 'white';
+      delBtn.style.border = 'none';
+      delBtn.style.borderRadius = '4px';
+      delBtn.style.padding = '4px 10px';
+      delBtn.onclick = function () {
+        li.remove();
+      };
+
+      li.appendChild(input);
+      li.appendChild(delBtn);
+      list.appendChild(li);
+    }
+
+    function toggleChoices(select, qIdx) {
+      const area = document.getElementById('choices-area-' + qIdx);
+      area.style.display = (select.value === '객관식') ? 'block' : 'none';
+    }
+  </script>
+</head>
+<body>
+<div class="container">
+  <h2>설문 만들기</h2>
+  <form action="/survey/create" method="post">
+    <label>설문 제목</label>
+    <input type="text" name="title" required maxlength="100">
+    <label>설명</label>
+    <textarea name="description" maxlength="300"></textarea>
+    <div id="questions-area"></div>
+    <button type="button" class="btn" onclick="addQuestion()">+ 문항 추가</button>
+    <button type="submit" class="btn">저장</button>
+  </form>
+</div>
+</body>
+</html>

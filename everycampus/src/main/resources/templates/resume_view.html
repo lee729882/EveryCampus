@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>내 이력서 보기</title>
+  <style>
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background-color: #f9f9f9;
+      padding: 40px;
+      color: #222;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      color: #4263eb;
+      border-bottom: 2px solid #ccc;
+      padding-bottom: 10px;
+    }
+
+    .section {
+      margin-top: 30px;
+    }
+
+    .label {
+      font-weight: bold;
+      color: #555;
+    }
+
+    .value {
+      margin-left: 10px;
+      color: #111;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 20px;
+      margin-right: 20px;
+      color: #5f3dc4;
+      text-decoration: none;
+      font-size: 0.95rem;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>내 이력서</h2>
+
+    <div class="section">
+      <p><span class="label">성명:</span><span class="value" th:text="${resume.name}"></span></p>
+      <p><span class="label">이메일:</span><span class="value" th:text="${resume.email}"></span></p>
+      <p><span class="label">전화번호:</span><span class="value" th:text="${resume.phone}"></span></p>
+      <p><span class="label">주소:</span><span class="value" th:text="${resume.address}"></span></p>
+    </div>
+
+    <div class="section">
+      <h3>학력</h3>
+      <p><span class="label">학교 1:</span><span class="value" th:text="${resume.school1}"></span> (<span th:text="${resume.major1}"></span>)</p>
+      <p><span class="label">학교 2:</span><span class="value" th:text="${resume.school2}"></span> (<span th:text="${resume.major2}"></span>)</p>
+    </div>
+
+    <div class="section">
+      <h3>경력</h3>
+      <p><span class="label">회사 1:</span><span class="value" th:text="${resume.company1}"></span> (<span th:text="${resume.role1}"></span>)</p>
+      <p><span class="label">회사 2:</span><span class="value" th:text="${resume.company2}"></span> (<span th:text="${resume.role2}"></span>)</p>
+    </div>
+
+    <div class="section">
+      <h3>기타</h3>
+      <p><span class="label">어학:</span><span class="value" th:text="${resume.language}"></span></p>
+      <p><span class="label">자격증:</span><span class="value" th:text="${resume.certificate}"></span></p>
+    </div>
+
+    <!-- ✅ 추가된 링크들 -->
+    <a class="back-link" href="/resume">← 수정하러 가기</a>
+    <a class="back-link" href="/main.html">← 메인으로 돌아가기</a>
+  </div>
+
+</body>
+</html>

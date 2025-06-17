@@ -1,0 +1,57 @@
+<!-- templates/survey_detail.html -->
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>설문 상세</title>
+  <style>
+    body { font-family: 'Noto Sans KR', sans-serif; background: #f9f9f9; padding: 40px; }
+    .container { max-width: 600px; margin: auto; background: #fff; border-radius: 12px; padding: 30px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);}
+    h2 { color: #4263eb; margin-bottom: 24px; }
+    .desc { color: #555; margin-bottom: 20px; }
+    .question-block { margin-bottom: 20px; }
+    .label { font-weight: bold; }
+    .btn { background: #4263eb; color: #fff; padding: 12px 28px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; }
+    .btn:hover { background: #364fc7; }
+    .link-btn { display: inline-block; background: #4263eb; color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none; margin-top: 20px; }
+    .link-btn.gray { background: #868e96; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h2 th:text="${survey.title}">설문 제목</h2>
+  <div class="desc" th:text="${survey.description}"></div>
+
+  <form th:action="@{/survey/{id}/answer(id=${survey.id})}" method="post">
+    <div th:each="question, idx : ${survey.questions}" class="question-block">
+      <div class="label" th:text="'Q' + (${idx.index}+1) + '. ' + ${question.questionText}"></div>
+      <div th:switch="${question.type}">
+        <div th:case="'객관식'">
+          <div th:if="${question.choices != null and #lists.size(question.choices) > 0}">
+            <div th:each="choice : ${question.choices}">
+              <label>
+                <input type="radio" th:name="'answers['+${question.id}+']'" th:value="${choice}" required>
+                <span th:text="${choice}"></span>
+              </label>
+            </div>
+          </div>
+          <div th:if="${question.choices == null or #lists.isEmpty(question.choices)}" style="color: #f03e3e;">
+            <span>등록된 보기가 없습니다.</span>
+          </div>
+        </div>
+        <div th:case="'주관식'">
+          <input type="text" th:name="'answers['+${question.id}+']'" style="width:100%;padding:8px;">
+        </div>
+      </div>
+    </div>
+    <button type="submit" class="btn">응답 제출</button>
+  </form>
+
+  <!-- 결과 보기 / 목록으로 이동 버튼 -->
+  <div style="margin-top: 30px; display: flex; gap: 10px;">
+    <a th:href="@{/survey/result/{id}(id=${survey.id})}" class="link-btn">결과 보기</a>
+    <a th:href="@{/survey}" class="link-btn gray">목록으로</a>
+  </div>
+</div>
+</body>
+</html>

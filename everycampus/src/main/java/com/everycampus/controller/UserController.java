@@ -4,6 +4,7 @@ import com.everycampus.entity.User;
 import com.everycampus.repository.UserRepository;
 import com.everycampus.service.MailService;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 import java.util.HashMap;
@@ -35,13 +36,15 @@ public class UserController {
     }
     
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody User loginUser) {
+    public ResponseEntity<?> login(@RequestBody User loginUser, HttpSession session) {
         Optional<User> user = userRepository.findByUsername(loginUser.getUsername());
 
         if (user.isEmpty() || !user.get().getPassword().equals(loginUser.getPassword())) {
             return ResponseEntity.status(401).body("아이디 또는 비밀번호가 올바르지 않습니다.");
         }
-
+        
+        // ⭐️ 세션에 저장
+        session.setAttribute("username", user.get().getUsername());
         // ✅ 사용자명과 학교명 함께 JSON으로 응답
         Map<String, String> result = new HashMap<>();
         result.put("username", user.get().getUsername());

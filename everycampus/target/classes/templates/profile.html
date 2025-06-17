@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>내 정보</title>
+  <style>
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      padding: 40px;
+      background-color: #f9f9f9;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      color: #4263eb;
+      margin-bottom: 20px;
+    }
+
+    .label { font-weight: bold; margin-top: 10px; display: inline-block; }
+
+    .post-list { margin-top: 30px; }
+    .post-item { padding: 10px 0; border-bottom: 1px solid #ccc; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>내 프로필</h2>
+
+    <p><span class="label">아이디:</span> <span th:text="${user.username}"></span></p>
+    <p><span class="label">이메일:</span> <span th:text="${user.email}"></span></p>
+    <p><span class="label">가입일:</span> <span th:text="${user.createdAt}"></span></p>
+
+    <div class="post-list">
+      <h2>내가 쓴 글</h2>
+      <div th:each="article : ${articles}" class="post-item">
+        <a th:href="@{'/article/' + ${article.id}}" th:text="${article.title}"></a>
+        <small th:text="${#temporals.format(article.createdAt, 'yyyy-MM-dd HH:mm')}"></small>
+      </div>
+    </div>
+
+    <a href="/main.html" style="display:block; margin-top:20px; color:#5f3dc4;">← 메인으로</a>
+  </div>
+</body>
+</html>
