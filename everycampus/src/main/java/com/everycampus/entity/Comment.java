@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name = "comments")
+@Table(name = "comment_sd")
 @Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor

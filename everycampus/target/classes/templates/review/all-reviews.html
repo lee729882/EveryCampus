@@ -81,7 +81,23 @@ button.home-button:hover {
     <p>등록된 리뷰가 없습니다.</p>
   </div>
 
-<button class="home-button" onclick="location.href='/main.html'">홈으로 가기</button>
+<button class="home-button" onclick="goHome()">홈으로 가기</button>
+
+<script>
+function getMainUrl(school) {
+	  const map = {
+	    "목포대학교": "/main.html",
+	    "순천대학교": "/main-SCNU.html",
+	    "전남대학교": "/main-JNU.html"
+	  };
+	  return map[school] || "/main-default.html";
+	}
+
+	function goHome() {
+	  const school = localStorage.getItem("school") || "";
+	  window.location.href = getMainUrl(school);
+	}
+</script>
 <script src="/js/theme.js"></script>
 </body>
 </html>

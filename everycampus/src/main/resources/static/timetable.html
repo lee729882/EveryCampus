@@ -295,9 +295,20 @@
       });
     }
 
-    function goHome() {
-      window.location.href = "/main.html";
-    }
+    function getMainUrl(school) {
+    	  const map = {
+    	    "목포대학교": "/main.html",
+    	    "순천대학교": "/main-SCNU.html",
+    	    "전남대학교": "/main-JNU.html"
+    	  };
+    	  return map[school] || "/main-default.html";
+    	}
+
+    	function goHome() {
+    	  const school = localStorage.getItem("school") || "";
+    	  window.location.href = getMainUrl(school);
+    	}
+
 
     document.addEventListener("DOMContentLoaded", () => {
       initTimetable();

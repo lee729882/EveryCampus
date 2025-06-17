@@ -27,7 +27,7 @@ public class BoardLike {
 
     private LocalDateTime likedAt;
 
-    // ✅ postId, username으로 생성 시 likedAt은 현재 시간으로 설정
+    //postId, username으로 생성 시 likedAt은 현재 시간으로 설정
     public BoardLike(Long postId, String username) {
         this.postId = postId;
         this.username = username;

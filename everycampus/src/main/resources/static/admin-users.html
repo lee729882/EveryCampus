@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>회원 관리</title>
+  <link rel="stylesheet" href="/css/dark-theme.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap">
+  <style>
+    :root {
+      --primary: #007bff;
+      --danger: #dc3545;
+      --background: #f8f9fa;
+      --card: #fff;
+      --text: #333;
+      --text-light: #666;
+      --border: #dee2e6;
+    }
+
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background-color: var(--background);
+      padding: 20px;
+      max-width: 600px;
+      margin: 0 auto;
+      color: var(--text);
+    }
+
+    h2 {
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+      color: var(--primary);
+      border-bottom: 2px solid var(--primary);
+      padding-bottom: 0.5rem;
+    }
+
+    .user-card {
+      background-color: var(--card);
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 1rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .user-info {
+      flex: 1;
+    }
+
+    .user-info strong {
+      font-size: 1.1rem;
+    }
+
+    .user-info p {
+      font-size: 0.9rem;
+      color: var(--text-light);
+      margin: 2px 0;
+    }
+
+    .btn-delete {
+      background-color: var(--danger);
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    .btn-delete:hover {
+      background-color: #c82333;
+    }
+
+    .empty {
+      text-align: center;
+      padding: 2rem;
+      background-color: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      color: var(--text-light);
+    }
+
+    .back-btn {
+      display: inline-block;
+      margin-top: 20px;
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .back-btn:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <h2>👥 회원 관리</h2>
+  <div id="userList"></div>
+
+  <a href="/admin.html" class="back-btn">← 관리자 메인으로</a>
+
+  <script>
+    async function loadUsers() {
+      const res = await fetch("/admin/users", { credentials: "include" });
+      const container = document.getElementById("userList");
+
+      if (res.ok) {
+        const users = await res.json();
+        if (users.length === 0) {
+          container.innerHTML = `<div class="empty">등록된 회원이 없습니다.</div>`;
+          return;
+        }
+
+        container.innerHTML = users.map(u => `
+          <div class="user-card">
+            <div class="user-info">
+              <strong>${u.username}</strong>
+              <p>이메일: ${u.email}</p>
+              <p>학교: ${u.school}</p>
+              <p>권한: ${u.role}</p>
+            </div>
+            <button class="btn-delete" onclick="deleteUser(${u.id})">삭제</button>
+          </div>
+        `).join("");
+      } else {
+        alert("회원 정보를 불러오는 데 실패했습니다.");
+      }
+    }
+
+    async function deleteUser(id) {
+      if (!confirm("정말로 삭제하시겠습니까?")) return;
+      const res = await fetch(`/admin/user/${id}`, { method: "DELETE" });
+      if (res.ok) {
+        alert("삭제 완료");
+        loadUsers();
+      } else {
+        alert("삭제 실패");
+      }
+    }
+
+    loadUsers();
+  </script>
+</body>
+</html>

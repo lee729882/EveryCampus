@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/review")
@@ -37,6 +40,7 @@ public class ReviewController {
     @PostMapping("/save")
     public String saveReview(@ModelAttribute Review review) {
         reviewRepository.save(review);
-        return "redirect:/review/lecture?name=" + review.getLectureName();
-    }
+        return "redirect:/review/lecture?name=" +
+        URLEncoder.encode(review.getLectureName(), StandardCharsets.UTF_8);    
+        }
 }

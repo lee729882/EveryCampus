@@ -13,7 +13,14 @@ public interface FreeBoardRepository extends JpaRepository<FreeBoard, Long> {
 
     // 전체 학교 + 특정 게시판용 (예: 통합 자유게시판)
     List<FreeBoard> findByCategoryOrderByCreatedAtDesc(String category);
+<<<<<<< HEAD
 
     // ✅ 사용자 작성 게시글 보기용
     List<FreeBoard> findByWriterOrderByCreatedAtDesc(String writer);
 }
+=======
+    //HOT 게시뭏
+    List<FreeBoard> findTop10ByLikeCountGreaterThanOrderByLikeCountDesc(int likeCount);
+
+}
+>>>>>>> branch 'main' of https://github.com/lee729882/EveryCampus.git
