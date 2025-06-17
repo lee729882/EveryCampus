@@ -12,4 +12,7 @@ public interface FreeBoardRepository extends JpaRepository<FreeBoard, Long> {
 
     // 전체 학교 + 특정 게시판용 (예: 통합 자유게시판)
     List<FreeBoard> findByCategoryOrderByCreatedAtDesc(String category);
+    //HOT 게시뭏
+    List<FreeBoard> findTop10ByLikeCountGreaterThanOrderByLikeCountDesc(int likeCount);
+
 }

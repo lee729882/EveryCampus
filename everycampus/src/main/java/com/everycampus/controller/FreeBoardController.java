@@ -189,4 +189,11 @@ public class FreeBoardController {
                 "likeCount", post.getLikeCount()
         ));
     }
+    
+    // HOT 게시물
+    @GetMapping("/hot")
+    public List<FreeBoard> getHotPosts() {
+        return freeBoardRepository.findTop10ByLikeCountGreaterThanOrderByLikeCountDesc(0);
+    }
+
 }
