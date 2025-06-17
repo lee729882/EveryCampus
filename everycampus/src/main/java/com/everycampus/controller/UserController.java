@@ -15,6 +15,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.servlet.http.HttpSession;
+
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
@@ -35,17 +37,20 @@ public class UserController {
     }
     
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody User loginUser) {
+    public ResponseEntity<?> login(@RequestBody User loginUser, HttpSession session) {
         Optional<User> user = userRepository.findByUsername(loginUser.getUsername());
-
+        
         if (user.isEmpty() || !user.get().getPassword().equals(loginUser.getPassword())) {
             return ResponseEntity.status(401).body("아이디 또는 비밀번호가 올바르지 않습니다.");
         }
+
+        session.setAttribute("loginUser", user.get()); 
 
         // ✅ 사용자명과 학교명 함께 JSON으로 응답
         Map<String, String> result = new HashMap<>();
         result.put("username", user.get().getUsername());
         result.put("school", user.get().getSchool());
+        result.put("role", user.get().getRole());  // ← 이 줄 추가
 
         return ResponseEntity.ok(result);
     }

@@ -126,24 +126,27 @@
       // ✅ 사용자 정보 저장
       localStorage.setItem("username", result.username);
       localStorage.setItem("school", result.school);  // 선택적으로 저장
+      localStorage.setItem("role", result.role || "");
 
 
-      const school = result.school.trim();
-      // ✅ 학교별로 페이지 분기
-      switch (result.school) {
-        case "목포대학교":
-          location.href = "/main.html";
-          break;
-        case "전남대학교":
-          location.href = "/main-JNU.html";
-          break;
-        case "순천대학교":
-          location.href = "/main-SCNU.html";
-          break;
-        default:
-          alert("등록되지 않은 학교입니다.");
-          break;
-      }
+      if (result.role === "ADMIN") {
+    	  location.href = "/admin.html";
+    	} else {
+    	  switch (result.school?.trim()) {
+    	    case "목포대학교":
+    	      location.href = "/main.html";
+    	      break;
+    	    case "전남대학교":
+    	      location.href = "/main-JNU.html";
+    	      break;
+    	    case "순천대학교":
+    	      location.href = "/main-SCNU.html";
+    	      break;
+    	    default:
+    	      alert("등록되지 않은 학교입니다.");
+    	  }
+    	}
+	
     } else {
       const error = await response.text();
       alert(error);  // 로그인 실패
