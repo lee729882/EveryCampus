@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>게시물 관리</title>
+  <link rel="stylesheet" href="/css/dark-theme.css" />
+  <style>
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background-color: #f8f9fa;
+      padding: 20px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    h2 {
+      color: #007bff;
+      margin-bottom: 20px;
+    }
+
+    .post {
+      background-color: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      padding: 16px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+
+    .post-title {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 6px;
+    }
+
+    .post-meta {
+      font-size: 0.9rem;
+      color: #666;
+      margin-bottom: 10px;
+    }
+
+    .post-content {
+      font-size: 0.95rem;
+      margin-bottom: 12px;
+    }
+
+    .delete-btn {
+      background-color: #dc3545;
+      color: #fff;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .delete-btn:hover {
+      background-color: #c82333;
+    }
+
+    .back-btn {
+      display: inline-block;
+      margin-bottom: 20px;
+      background-color: #6c757d;
+      color: #fff;
+      padding: 8px 14px;
+      border-radius: 6px;
+      text-decoration: none;
+    }
+
+    .back-btn:hover {
+      background-color: #5a6268;
+    }
+  </style>
+</head>
+<body>
+
+  <a href="/admin.html" class="back-btn">← 관리자 메인으로</a>
+  <h2>📄 게시글 목록</h2>
+
+  <div id="postList"></div>
+
+  <script>
+    async function loadPosts() {
+      const res = await fetch("/admin/posts", { credentials: "include" });
+      if (res.ok) {
+        const posts = await res.json();
+        const container = document.getElementById("postList");
+        container.innerHTML = posts.map(p => `
+        <div class="post">
+          <div class="post-title">${p.title}</div>
+          <div class="post-meta">
+          작성자: ${p.writer} | 학교: ${p.school} | 게시판: ${p.category} | ${new Date(p.createdAt).toLocaleString()}
+        </div>
+          <div class="post-content">${p.content}</div>
+          <button class="delete-btn" onclick="deletePost(${p.id})">삭제</button>
+        </div>
+      `).join("");
+
+      } else {
+        alert("게시글을 불러올 수 없습니다.");
+      }
+    }
+
+    async function deletePost(id) {
+      if (!confirm("정말 이 게시글을 삭제하시겠습니까?")) return;
+      const res = await fetch(`/admin/post/${id}`, {
+        method: "DELETE",
+        credentials: "include"
+      });
+      if (res.ok) {
+        alert("삭제 완료");
+        loadPosts();
+      } else {
+        alert("삭제 실패");
+      }
+    }
+
+    loadPosts();
+  </script>
+
+</body>
+</html>

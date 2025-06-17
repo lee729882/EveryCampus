@@ -32,4 +32,8 @@ public class User {
     
     @Column(nullable = false, unique = true)
     private String email;
+    
+    @Column(nullable = false)
+    private String role = "USER";  // 기본값은 일반 사용자
+
 }
