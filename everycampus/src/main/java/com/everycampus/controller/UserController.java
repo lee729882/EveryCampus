@@ -44,15 +44,12 @@ public class UserController {
         if (user.isEmpty() || !user.get().getPassword().equals(loginUser.getPassword())) {
             return ResponseEntity.status(401).body("아이디 또는 비밀번호가 올바르지 않습니다.");
         }
-<<<<<<< HEAD
         
         // ⭐️ 세션에 저장
         session.setAttribute("username", user.get().getUsername());
-=======
 
         session.setAttribute("loginUser", user.get()); 
 
->>>>>>> branch 'main' of https://github.com/lee729882/EveryCampus.git
         // ✅ 사용자명과 학교명 함께 JSON으로 응답
         Map<String, String> result = new HashMap<>();
         result.put("username", user.get().getUsername());
@@ -101,10 +98,5 @@ public class UserController {
             return ResponseEntity.badRequest().body("일치하는 회원이 없습니다.");
         }
     }
-    
- 
-
-
-
 
 }

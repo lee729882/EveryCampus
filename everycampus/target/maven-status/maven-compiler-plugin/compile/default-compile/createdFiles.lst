@@ -1,6 +1,0 @@
-com\everycampus\controller\UserController.class
-com\everycampus\service\MailService.class
-com\everycampus\entity\User$UserBuilder.class
-com\everycampus\demo\EverycampusApplication.class
-com\everycampus\repository\UserRepository.class
-com\everycampus\entity\User.class
