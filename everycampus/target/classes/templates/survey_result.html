@@ -37,7 +37,7 @@
       <div th:case="'주관식'">
         <div class="answer-list">
           <div th:each="ans : ${stats[question.id]}">
-            <span th:text="${ans}"></span>
+            <span th:text="${ans.text}"></span>
           </div>
         </div>
       </div>
