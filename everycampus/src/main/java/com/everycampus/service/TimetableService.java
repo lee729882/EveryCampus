@@ -31,10 +31,11 @@ public class TimetableService {
         return (subject == null) ? "" : subject;
     }
     // 시간표 저장
-    public void save(Timetable timetable) {
+    public void save(Timetable timetable, User user) {
+        timetable.setUser(user);  // 💥 이 줄이 없으면 에러 발생
         timetableRepository.save(timetable);
     }
-
+    
     // TimetableRequest를 받아 시간표 저장
     public void saveTimetable(TimetableRequest request) {
         String studentId = request.getStudentId();

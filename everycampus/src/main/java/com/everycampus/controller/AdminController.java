@@ -22,6 +22,7 @@ import java.util.Map;
 
 import com.everycampus.entity.FreeBoard;
 import com.everycampus.entity.User;
+import com.everycampus.repository.TimetableRepository; // 추가
 
 
 @RestController
@@ -32,11 +33,16 @@ public class AdminController {
 
     private final FreeBoardRepository freeBoardRepository;
 
+    private final TimetableRepository timetableRepository;
 
-    public AdminController(UserRepository userRepository, FreeBoardRepository freeBoardRepository) {
-        this.userRepository = userRepository;
-        this.freeBoardRepository = freeBoardRepository;
-    }
+    public AdminController(UserRepository userRepository,
+            FreeBoardRepository freeBoardRepository,
+            TimetableRepository timetableRepository) {
+		this.userRepository = userRepository;
+		this.freeBoardRepository = freeBoardRepository;
+		this.timetableRepository = timetableRepository;
+	}
+
 
 
     @GetMapping("/users")
@@ -57,6 +63,7 @@ public class AdminController {
         if (loginUser == null || !"ADMIN".equals(loginUser.getRole())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("권한이 없습니다.");
         }
+        timetableRepository.deleteByUserId(id);
 
         userRepository.deleteById(id);
         return ResponseEntity.ok("삭제 완료");

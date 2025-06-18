@@ -8,4 +8,6 @@ import java.util.List;
 public interface TimetableRepository extends JpaRepository<Timetable, Long> {
     List<Timetable> findByStudentId(String studentId);
     void deleteByStudentId(String studentId);
+    void deleteByUserId(Long userId);
+
 }

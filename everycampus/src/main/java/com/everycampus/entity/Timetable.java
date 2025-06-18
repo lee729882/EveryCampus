@@ -10,7 +10,7 @@ import lombok.*;
 @AllArgsConstructor
 public class Timetable {
 	@ManyToOne
-	@JoinColumn(name = "user_id")
+	@JoinColumn(name = "user_id", nullable = true)
 	private User user;
 
     @Id
