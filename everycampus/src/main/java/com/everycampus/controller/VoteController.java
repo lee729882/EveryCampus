@@ -35,9 +35,11 @@ public class VoteController {
     }
     // ✅ 투표 상세 보기 및 투표하기
     @GetMapping("/{id}")
-    public String voteForm(@PathVariable Long id, Model model) {
+    public String voteForm(@PathVariable Long id, Model model,
+                           @SessionAttribute(name = "username", required = false) String username) {
         Vote vote = voteRepository.findById(id).orElseThrow();
         model.addAttribute("vote", vote);
+        model.addAttribute("username", username);
         return "vote/form";
     }
 
@@ -45,7 +47,12 @@ public class VoteController {
     @PostMapping("/{id}/submit")
     public String submitVote(@PathVariable Long id,
                              @RequestParam Long optionId,
-                             @RequestParam String username) {
+                             @RequestParam(required = false) String username,
+                             @RequestParam(required = false) String anonymous) {
+
+        if ("true".equals(anonymous)) {
+            username = "익명";
+        }
 
         if (voteRecordRepository.existsByUsernameAndVoteId(username, id)) {
             return "redirect:/vote/" + id + "?error=alreadyVoted";
@@ -54,11 +61,9 @@ public class VoteController {
         Vote vote = voteRepository.findById(id).orElseThrow();
         VoteOption selected = voteOptionRepository.findById(optionId).orElseThrow();
 
-        // 카운트 증가
         selected.setCount(selected.getCount() + 1);
         voteOptionRepository.save(selected);
 
-        // 기록 저장
         VoteRecord record = new VoteRecord();
         record.setUsername(username);
         record.setVote(vote);

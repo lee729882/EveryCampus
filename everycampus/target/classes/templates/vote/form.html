@@ -51,26 +51,52 @@
   <h2 th:text="${vote.title}">투표 제목</h2>
 
   <form th:action="@{|/vote/${vote.id}/submit|}" method="post">
+    <!-- 닉네임 입력 -->
     <div class="mb-4">
       <label for="username" class="form-label">이름 또는 닉네임</label>
-      <input type="text" id="username" name="username" class="form-control" placeholder="입력해주세요" required>
+      <input type="text" id="username" name="username" class="form-control"
+             placeholder="입력해주세요"
+             th:value="${username}" required>
+
+      <div class="form-check mt-2">
+        <input class="form-check-input" type="checkbox" id="anonymousCheck" name="anonymous" value="true"
+               onclick="toggleUsername()">
+        <label class="form-check-label" for="anonymousCheck">익명으로 참여하기</label>
+      </div>
     </div>
 
+    <!-- 보기 선택 -->
     <div class="mb-4">
       <label class="form-label d-block">선택 항목</label>
       <div th:each="opt : ${vote.options}" class="form-check mb-2">
-        <input class="form-check-input" type="radio" name="optionId" th:value="${opt.id}" th:id="'option' + ${opt.id}" required>
-        <label class="form-check-label" th:for="'option' + ${opt.id}" th:text="${opt.content}">보기</label>
+        <input class="form-check-input" type="radio" name="optionId"
+               th:value="${opt.id}" th:id="'option' + ${opt.id}" required>
+        <label class="form-check-label" th:for="'option' + ${opt.id}"
+               th:text="${opt.content}">보기</label>
       </div>
     </div>
 
     <button type="submit" class="btn btn-primary w-100">🗳️ 투표하기</button>
 
-    <div th:if="${param.error}" class="alert alert-danger text-center">
+    <div th:if="${param.error}" class="alert alert-danger text-center mt-3">
       ⚠ 이미 참여한 사용자입니다.
     </div>
   </form>
 </div>
+
+<script>
+  function toggleUsername() {
+    const checkbox = document.getElementById("anonymousCheck");
+    const usernameField = document.getElementById("username");
+    if (checkbox.checked) {
+      usernameField.disabled = true;
+      usernameField.value = '익명';
+    } else {
+      usernameField.disabled = false;
+      usernameField.value = '';
+    }
+  }
+</script>
 
 </body>
 </html>
